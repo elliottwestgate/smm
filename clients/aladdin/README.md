@@ -10,6 +10,7 @@ This section contains the strategy sources, editable campaign calendar, first tw
 - `calendar/`
   - Original 45-Day Rolling Calendar Template
   - Completed, editable 45-day Organic Social Media Magnet campaign workbook
+  - October 15–November 28 rolling calendar aligned to the October 8 approved Strategy Canvas
 - `content/weeks-01-02/`
   - Website and social copy in editable DOCX and Markdown formats
   - Image manifest and production log
@@ -20,6 +21,7 @@ This section contains the strategy sources, editable campaign calendar, first tw
 
 - Full rolling calendar: August 31-October 14, 2026
 - Completed content package: August 31-September 13, 2026
+- Current aligned calendar: October 15-November 28, 2026. Already scheduled October posts remain marked as scheduled; later entries are editorial plans.
 
 ## Publishing notes
 
@@ -28,4 +30,5 @@ This section contains the strategy sources, editable campaign calendar, first tw
 - Generated people are illustrative and must not be identified as Aladdin employees or customers or paired with testimonial claims.
 - The production log identifies posts that use Aladdin-owned website photography.
 - Confirm final links, service availability, contact details, and scheduled dates before publication.
+- Read `strategy/README.md` and the October 8 approved Strategy Canvas before drafting or revising future content.
 
