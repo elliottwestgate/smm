@@ -1,3 +1,13 @@
+# Pro upload preview — 0.1.1-preview
+
+A self-contained WordPress workflow preview is now available in `plugin/westgate-practicum-pro`. Upload its release ZIP, activate, then use **Tools → Practicum Pro Preview** as an administrator. No service credentials are required in the default local preview mode. Aladdin's website and Constant Contact are preselected; actual campaign dates and primary action remain owner-entered.
+
+Local preview records are stored per user in separate WordPress metadata. This is a temporary workflow adapter for review, not a change to the planned platform-independent hosted architecture. Configuring all three service constants switches to the service backend; it does not migrate preview records automatically.
+
+Read the plugin README.txt for installation, scope and rollback. Keep the current member analytics page and legacy plugins in place. Live GA4, Constant Contact and Mailchimp reporting, scoring and certificates are not implemented by this ZIP.
+
+---
+
 # Westgate Practicum — Pro-first development foundation
 
 Status: 0.1.0-dev. First implementation slice; not a production release or live analytics replacement. No existing site, plugin, membership, grade, or certificate has been changed.
@@ -49,6 +59,6 @@ The current dashboard displays metric availability only. It does not compute wee
 
 ## Validation completed and remaining
 
-Nine service tests pass: provider selection, invalid setup, revision conflicts, user/tenant boundaries, unsigned requests, expiry/replay, signature method binding, null metrics, and reflection scope/week validation. Python compilation passes. PHP is not installed in the build environment, so PHP lint and WordPress runtime/browser validation have **not** been performed. Do not treat this as an upload-ready release.
+Nine service tests pass: provider selection, invalid setup, revision conflicts, user/tenant boundaries, unsigned requests, expiry/replay, signature method binding, null metrics, and reflection scope/week validation. Python compilation passes. PHP 8.3 syntax checks now pass for both plugin PHP files. Twelve local-preview behavior checks pass with WordPress API doubles. Actual WordPress and browser validation remains pending; this is an uploadable workflow preview, not a production analytics release.
 
 Next: validate the PHP portal on staging; add a stored-observation data contract, revisioned date windows and provider adapters; reconcile GA4 and Constant Contact using Aladdin; validate Mailchimp separately; then add visualization, exports, and reviewer workflow. Preserve the existing Pro scoring policy until explicitly resolved. Tune .net after Pro is working.

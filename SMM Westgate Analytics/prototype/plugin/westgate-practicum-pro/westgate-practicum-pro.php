@@ -1,19 +1,40 @@
 <?php
 /**
  * Plugin Name: Westgate Practicum Pro
- * Description: Pro-first portal for the independent Westgate analytics service. Development foundation.
- * Version: 0.1.0-dev
+ * Description: Pro-first portal for the independent Westgate analytics service. Local workflow preview; analytics connections are pending.
+ * Version: 0.1.1-preview
  * Author: Westgate Marketing
  * Requires PHP: 8.0
  * License: GPL-2.0-or-later
  */
 if (!defined('ABSPATH')) { exit; }
 
+require_once __DIR__ . '/local-preview.php';
+
 final class Westgate_Practicum_Pro {
     public static function boot() {
+        add_action('admin_menu', [__CLASS__, 'menu']);
+        add_action('admin_enqueue_scripts', [__CLASS__, 'styles']);
+        add_action('wp_enqueue_scripts', [__CLASS__, 'styles']);
         add_shortcode('westgate_practicum_pro', [__CLASS__, 'render']);
         add_action('admin_post_wgpp_save', [__CLASS__, 'save']);
         add_action('template_redirect', [__CLASS__, 'private_page']);
+    }
+    public static function styles($hook = '') {
+        global $post;
+        if ($hook === 'tools_page_wgpp-preview' || (!is_admin() && $post && has_shortcode($post->post_content, 'westgate_practicum_pro'))) {
+            wp_enqueue_style('wgpp', plugins_url('portal.css', __FILE__), [], '0.1.1');
+        }
+    }
+    public static function menu() {
+        add_management_page('Practicum Pro Preview', 'Practicum Pro Preview', 'manage_options', 'wgpp-preview', [__CLASS__, 'admin_page']);
+    }
+    public static function admin_page() {
+        if (!current_user_can('manage_options')) { return; }
+        echo '<div class="wrap">' . self::render() . '</div>';
+    }
+    private static function return_url() {
+        return is_admin() ? admin_url('tools.php?page=wgpp-preview') : get_permalink();
     }
     private static function allowed() {
         return is_user_logged_in() && (current_user_can('manage_options') || current_user_can('westgate_practicum_access'));
@@ -27,7 +48,8 @@ final class Westgate_Practicum_Pro {
     }
     private static function request($method, $path, $data = null) {
         if (!defined('WESTGATE_ANALYTICS_URL') || !defined('WESTGATE_ANALYTICS_KEY') || !defined('WESTGATE_ANALYTICS_TENANT')) {
-            return new WP_Error('not_configured', 'The analytics service has not been configured.');
+            if (defined('WESTGATE_ANALYTICS_URL') || defined('WESTGATE_ANALYTICS_KEY') || defined('WESTGATE_ANALYTICS_TENANT')) { return new WP_Error('not_configured', 'Complete or remove the partial service configuration.'); }
+            return WGPP_Local_Preview::request($method, $path, $data);
         }
         $base = untrailingslashit(WESTGATE_ANALYTICS_URL);
         $parts = wp_parse_url($base);
@@ -76,7 +98,7 @@ final class Westgate_Practicum_Pro {
         if ($type === 'project') { $data['revision'] = absint($_POST['revision'] ?? 0); }
         $result = self::request($type === 'project' ? 'PUT' : 'POST', $type === 'project' ? '/v1/project' : '/v1/reflections', $data);
         set_transient('wgpp_notice_' . get_current_user_id(), is_wp_error($result) ? $result->get_error_message() : 'Saved.', 60);
-        $return = esc_url_raw(wp_unslash($_POST['return_to'] ?? ''));
+        $return = isset($_POST['return_to']) && is_string($_POST['return_to']) ? esc_url_raw(wp_unslash($_POST['return_to'])) : ''; 
         wp_safe_redirect(wp_validate_redirect($return, home_url('/')));
         exit;
     }
@@ -89,25 +111,25 @@ final class Westgate_Practicum_Pro {
     private static function form_start($kind) {
         echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '">';
         wp_nonce_field('wgpp_save');
-        echo '<input type="hidden" name="action" value="wgpp_save"><input type="hidden" name="kind" value="' . esc_attr($kind) . '"><input type="hidden" name="return_to" value="' . esc_url(get_permalink()) . '">';
+        echo '<input type="hidden" name="action" value="wgpp_save"><input type="hidden" name="kind" value="' . esc_attr($kind) . '"><input type="hidden" name="return_to" value="' . esc_url(self::return_url()) . '">';
     }
     public static function render() {
         if (!is_user_logged_in()) { return '<p><a href="' . esc_url(wp_login_url(get_permalink())) . '">Sign in to view your campaign.</a></p>'; }
         if (!self::allowed()) { return '<p>Your account has not been enabled for the Practicum Pro development preview.</p>'; }
-        wp_enqueue_style('wgpp', plugins_url('portal.css', __FILE__), [], '0.1.0');
+        wp_enqueue_style('wgpp', plugins_url('portal.css', __FILE__), [], '0.1.1');
         $result = self::request('GET', '/v1/project');
         ob_start();
-        echo '<section class="wgpp"><header><p class="wgpp-eyebrow">WESTGATE · SOCIAL MEDIA MAGNET PRO</p><h2>Your campaign, in perspective</h2><p>Understand what attracts your audience, what brings them back, and what to try next.</p><p class="wgpp-note">Development preview · Provider connections are not available yet.</p></header>';
+        echo '<section class="wgpp"><header><p class="wgpp-eyebrow">WESTGATE · SOCIAL MEDIA MAGNET PRO</p><h2>Your campaign, in perspective</h2><p>Understand what attracts your audience, what brings them back, and what to try next.</p><p class="wgpp-note">Workflow preview · Saves your campaign and reflections. Live analytics are not connected.</p></header>';
         $notice = get_transient('wgpp_notice_' . get_current_user_id());
         if ($notice) { echo '<p role="status">' . esc_html($notice) . '</p>'; delete_transient('wgpp_notice_' . get_current_user_id()); }
         if (is_wp_error($result)) { echo '<p role="status">' . esc_html($result->get_error_message()) . '</p></section>'; return ob_get_clean(); }
         $p = $result['project'] ?? [];
-        echo '<nav aria-label="Campaign sections"><a href="#wgpp-setup">Campaign setup</a><a href="#wgpp-results">Performance</a><a href="#wgpp-learn">Reflect &amp; experiment</a></nav>';
+        echo '<nav aria-label="Campaign sections"><a href="#wgpp-setup">Campaign setup</a>'; if ($p) { echo '<a href="#wgpp-results">Performance</a><a href="#wgpp-learn">Reflect &amp; experiment</a>'; } echo '</nav>';
         echo '<details id="wgpp-setup"' . (!$p ? ' open' : '') . '><summary>Campaign setup &amp; brand brief</summary>';
         self::form_start('project');
         echo '<input type="hidden" name="revision" value="' . esc_attr($result['revision']) . '"><div class="wgpp-grid">';
         foreach (['name'=>'Campaign name','website'=>'Website','primary_action'=>'Primary meaningful action','timezone'=>'Reporting timezone (e.g. America/Chicago)','start_date'=>'Campaign start','end_date'=>'Campaign end'] as $key=>$label) {
-            self::input($key, $label, $p[$key] ?? '', in_array($key,['start_date','end_date'],true) ? 'date' : ($key==='website' ? 'url' : 'text'), true);
+            self::input($key, $label, $p[$key] ?? ($key === 'website' ? 'https://aladdincleans.com' : ($key === 'timezone' ? 'America/Chicago' : '')), in_array($key,['start_date','end_date'],true) ? 'date' : ($key==='website' ? 'url' : 'text'), true);
         }
         echo '<label>Email provider<select name="email_provider">';
         foreach (['constant_contact'=>'Constant Contact','mailchimp'=>'Mailchimp'] as $value=>$label) { echo '<option value="' . esc_attr($value) . '"' . selected($p['email_provider'] ?? 'constant_contact', $value, false) . '>' . esc_html($label) . '</option>'; }
