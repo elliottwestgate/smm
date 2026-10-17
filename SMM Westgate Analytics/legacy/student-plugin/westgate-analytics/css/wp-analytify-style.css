@@ -1,0 +1,10 @@
+/* Stylesheet for Website Analytics Plugin */
+.website_analytics_dashboard { width: 100%; }
+
+.website_analytics_dashboard th { width: 8%; padding: 10px; }
+
+.website_analytics_dashboard td { text-align: center; padding: 10px; }
+
+.website_analytics_dashboard.heading th { border-bottom: 1px solid #e5e5e5; }
+
+#wpfooter { position: relative; }

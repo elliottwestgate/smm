@@ -1,0 +1,71 @@
+{
+  "status": "Sanitized reference archive; not a deployable replacement",
+  "source_plugin_version": "3.0.1",
+  "retained_files": 205,
+  "credential_redactions": [
+    {
+      "file": "westgate-analytics/includes/analytify-settings.php",
+      "replacements": 1
+    },
+    {
+      "file": "westgate-analytics/lib/google-api-php-client-master/README.md",
+      "replacements": 1
+    },
+    {
+      "file": "westgate-analytics/westgate-analytics.php",
+      "replacements": 3
+    }
+  ],
+  "omitted_vendor_examples_tests_and_keys": [
+    "westgate-analytics/lib/google-api-php-client-master/examples/appengineauth.php",
+    "westgate-analytics/lib/google-api-php-client-master/examples/batch.php",
+    "westgate-analytics/lib/google-api-php-client-master/examples/fileupload.php",
+    "westgate-analytics/lib/google-api-php-client-master/examples/idtoken.php",
+    "westgate-analytics/lib/google-api-php-client-master/examples/index.php",
+    "westgate-analytics/lib/google-api-php-client-master/examples/key.p12",
+    "westgate-analytics/lib/google-api-php-client-master/examples/multi-api.php",
+    "westgate-analytics/lib/google-api-php-client-master/examples/service-account.php",
+    "westgate-analytics/lib/google-api-php-client-master/examples/simple-query.php",
+    "westgate-analytics/lib/google-api-php-client-master/examples/simplefileupload.php",
+    "westgate-analytics/lib/google-api-php-client-master/examples/styles/style.css",
+    "westgate-analytics/lib/google-api-php-client-master/examples/templates/base.php",
+    "westgate-analytics/lib/google-api-php-client-master/examples/user-example.php",
+    "westgate-analytics/lib/google-api-php-client-master/src/Google/IO/cacerts.pem",
+    "westgate-analytics/lib/google-api-php-client-master/tests/adsense/AdSenseTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/AllTests.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/BaseTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/bootstrap.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/ApiBatchRequestTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/ApiCacheParserTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/ApiClientTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/ApiMediaFileUploadTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/ApiModelTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/ApiOAuth2Test.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/AuthTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/CacheTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/GeneralTests.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/IoTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/RequestTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/RestTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/ServiceTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/testdata/cacert.json",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/testdata/cacert.pem",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/testdata/cert.p12",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/testdata/privkey.pem",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/testdata/test.ini",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/testdata/test_public_key.pem",
+    "westgate-analytics/lib/google-api-php-client-master/tests/general/URITemplateTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/OAuthHelper.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/pagespeed/AllPageSpeedTests.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/pagespeed/PageSpeedTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/phpunit.xml",
+    "westgate-analytics/lib/google-api-php-client-master/tests/plus/PlusTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/README",
+    "westgate-analytics/lib/google-api-php-client-master/tests/tasks/AllTasksTests.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/tasks/TasksTest.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/urlshortener/AllUrlShortenerTests.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/urlshortener/UrlShortenerTests.php",
+    "westgate-analytics/lib/google-api-php-client-master/tests/youtube/YouTubeTest.php"
+  ],
+  "original_archive_modified": false
+}

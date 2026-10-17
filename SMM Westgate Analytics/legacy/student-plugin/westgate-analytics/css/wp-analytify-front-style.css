@@ -1,0 +1,8 @@
+/* Stylesheet for Website Analytics Plugin */
+.website_analytics_dashboard th { font-size: .8rem; text-align: center; }
+
+.website_analytics_dashboard td { text-align: center !important; }
+
+.website_analytics-template-default #primary, .website_analytics-template-default .content { width: 100%; }
+
+.website_analytics-template-default #secondary, .website_analytics-template-default .sidebar { display: none; }

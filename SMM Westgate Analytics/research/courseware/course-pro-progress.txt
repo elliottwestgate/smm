@@ -1,0 +1,58 @@
+< Previous
+Next >
+
+Progress Reports
+
+
+Metrics are vital to managerial decision-making
+
+For any company or individual running an inbound marketing campaign, a consistent audit of these important metrics is vital to managerial decision-making.  Whether is about identifying your:
+
+Brand Awareness: the total number of users, new users, sessions, or pageview on your website
+Brand Acquisition: whether consumers are coming to your site due to email, social channels, organic search, or backlink referrals from other websites,
+Brand Retention: tracking through goals how many users are completing your call-to-actions, subscribing to your email campaign, and opening/clicking through your actual emails.
+
+In all of these instances, managerial decision-making should be based on analytics.  In future chapters, we will address the specific strategies related to these numbers. Still, it is important to realize that a company or individual must identify these metrics BEFORE the campaign to measure the impact of the content decisions.  Therefore, for the sake of Live Campaign, we have developed a progress report system that will be used during the entire campaign through our Social Media Magnet plugin.  This website analytics reporting mechanism should guide you about how the campaign is performing and how to adjust it appropriately.  Once the Live Campaign has begun, to access these weekly analytics, you will need to go to The Social Media Magnet Pro dashboard (not your WordPress dashboard) and click on the blue hyperlink called “Website Analytics.”  Here you will find the following data to help you complete your three campaign progress reports.  Directions on these reports will be included in your Level 4 Assignments.  But for now, let’s examine these reports.
+
+Progress Reports: Raw Data
+
+First, you will be provided the raw data for your website and MailChimp email campaigns weekly.  As you will see below, data will be collected across four items for each category of brand awareness, brand acquisition, and brand retention per week, from Sunday to Saturday.  The plugin will run a cron job (an automatic data pull) for each Live Campaign website every Sunday to report your weekly metrics.  Note: Metrics will be reported each week cumulatively, meaning that Week 3’s report will include all of the data for Week 1, 2, and 3.  This cumulative reporting allows you to see how your website is growing each week.  Like an annuity investment, if you are performing the campaign correctly, then you should see compounded growth each week, as the previous week’s blogs will still be helping increase traffic in future weeks (that is, if it is good content). The raw data will look like this:
+
+Social Media Magnet Pro Member Analytics Raw Data
+
+For awareness, the plugin will track how many users, new users, sessions, and pageviews you accumulated on your website each cumulative week.  The awareness measure is a function of how well your content is being perceived and how much traffic is flowing back to your website.  Good content is the impetus here.  If you have content with slugs that interest people, then they will click on your social links to come back to read the full blog article.  For acquisition, these numbers tell you where you are most successful in driving your traffic back to the site.  Specifically, these acquisition channels refer to:
+
+Direct: Most of these website users are related to your email campaign.  Users are clicking on your email links and are pushed “directly” back to your website from the email link.  (Note: People who come in via the category of “Email” are typically users who have come in on a forwarded email from someone else.  Even though Google Analytics will demonstrate this category separately from Direct, we do NOT measure the “Email” category because it is not a user due to your primary action, again, since it was a forwarded email from someone else.)
+Social: These users are clicking on links within social media platforms, most notably Facebook, Instagram, Twitter, LinkedIn, etc.  A deeper look into just the social channel will tell you which social channels are most productive in driving traffic to your site.
+Organic Search: Users in this category find your website through search engines like Google, Bing, and Yahoo.  Search engine optimization and selection of the right keywords will help increase traffic in this category.
+Referrals: Whenever another website shares your content and that users ethically create a backlink URL to your site, then these users who click on that backlink and end up at your site are called Referrals.
+
+Next, the retention category measures the completion of the goals that have been set up on your website.  Specifically, you are required to set up a “Follow-Me” goal that will track the number of users who subscribe to your email campaign.  This “destination” goal tracks the number of users from your MailChimp sign-up form to your sign-up thank you page.  Building goal funnels in Google Analytics is an essential step in tracking the percentage of users completing your call-to-actions and how many abandon the goal funnel process.  If your abandonment rate is too high, there is often a problem with the goal funnel structure.  Lowering this rate will increase your goal completion numbers and increase your grade.  Also, within the retention category, the plugin will monitor your email campaign progress at MailChimp, recording your overall subscribers, email opens, and email click-throughs.  This is very important because the OVERALL goal of this entire organic process is to move users from the top of the goal funnel through to the bottom, which in this class is signing up email subscribers and retaining them as part of the Social Media Magnet theory.  Remember, your project overview looks like this:
+
+ 
+
+You need to set up your goal funnels at this stage, as outlined in this chapter, to prepare for the campaign.  The other metrics will automatically track during the live campaign.
+
+Progress Reports: Grades
+
+Additionally, within the Website Metrics, you will also see below the raw data a set of score/grades associated with each of the single items (e.g., users, new users, sessions, etc.).  These grades are calculated from the mean and standard deviation for every single item across each Live Campaign program. You are competing with others, just like yourself. in your class. (Note: If you do not understand how mean and standard deviation are used to calculate a grade, we have a FAQ that will explain it to you.)  Like we have said before, this class is based on competition.  Just like the real world, you are competing against every other blogger in your domain, every other company in your product or service category, every other employee at your work for the promotion. Realistically, you are even competing against yourself to grow your social impact week over week, month over month, and year over year.  We have found that many people have trouble with the competition side of your Live Campaign, but we implore you to get used to this aspect.  As soon as you graduate, competition becomes the name of the game in a free-market society.  And just like the real world, your Live Campaign score/grade is based on how well you do on each of these metrics versus the other Live Campaign results.  These per item Score/Grades will appear like this:
+
+Social Media Magnet Pro Member Analytics Grades
+
+Along with each of the per item grades, you will also see a categorical grade, one each for Brand Awareness, Brand Acquisition, and Brand Retention.  These categorical grades are just averages for each of the four items in the category.  However, the revelation with these categorical grades is to realize how well (or poorly) you are doing in any one category.  The category with the lowest grade is one that you should probably focus on more diligently to raise your overall score/grade.  For example, in the demonstration below, this person is doing pretty well with their email campaign because the score/grade in the retention category is stronger at 87.06%.  But they are worse at driving traffic to their website because the awareness category score/grade is only 72.39%. 
+
+Therefore, they should focus on creating stronger, more relevant content.  This poor content could be due to just overall weak content on their website blog, or it could be due to not blogging or posting enough in their social media channels.  A content audit could lead to why this content is failing and could potentially assist with the acquisition score/grade.  Better content should lead to more users being acquired from your social media platforms, which obviously would help your acquisition score/grade as well.
+
+Social Media Magnet Pro Member Analytics Sub- Level Grades
+
+Note: Remember, ALL (each item score/grade and categorical grade) are cumulative grades, starting Week 1 of the campaign through the current week’s grades.  Therefore, the weekly grade, highlighted in purple, is a cumulative overall score/grade for your Live Campaign.  In reality, this IS your current overall Live Campaign score/grade.
+
+You will be starting your Live Campaign soon.  Good luck, and please remember, your Live Campaign score/grade is HIGHLY CORRELATED with how hard you work on your campaign.  If you put in the time, then in most instances, you will receive the reward of a score/grade that is standard deviations above the mean.  But be sure to start at a sprint because, like the annuity metaphor, each week’s metrics are compounding.  You want to get the full compounding effect over the entire Live Campaign, so start strong and keep running the race.  It’s a marathon, but you can do it, and who knows, you might even enjoy it.
+
+ 
+
+ 
+
+Edit Edit with WPBakery Page Builder
+< Previous
+Next >
