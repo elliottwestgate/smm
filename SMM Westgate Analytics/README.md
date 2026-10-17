@@ -10,6 +10,8 @@ The proposed design uses one hosted analytics service and a small shared WordPre
 
 ## Start here
 
+- [SMM .net and Pro work history](docs/SMM-Net-and-Pro-Work-History.md): consolidated payment, registration, navigation, certificate, hosting, and analytics history with site links and remaining follow-ups.
+- [Book editions](../publishing/README.md): the owner's current OneDrive book and the earlier publishing edition.
 - [Replacement scope PDF](docs/Westgate-Practicum-Analytics-Replacement-Scope.pdf): nine-page scope covering methodology, metrics, deployment, AI, migration, and acceptance gates.
 - [Project handoff](docs/HANDOFF.md): confirmed requirements, decisions still needed, and the next technical pilot.
 - [Implementation backlog](docs/BACKLOG.md): ordered work packages and acceptance criteria.
