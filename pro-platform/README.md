@@ -142,3 +142,7 @@ Live validation covered V1Moto → Aladdin → V1Moto, automatic collapse after 
 BizGift fixes are maintained in the plugin source: immutable encrypted PDF chunks keep writes below common packet limits; existing inline encrypted documents remain readable; renaming changes metadata without rewriting PDF bytes or frozen Review sources. The Review request step becomes a white, disabled Request ready control, with cancellation and date changes resetting it. Provider updates do not re-enable a completed request. Asset URLs use content hashes so a shared version filter cannot serve stale JavaScript or CSS.
 
 Production file-editor changes are prohibited by `AGENTS.md`. Build only committed source with `python pro-platform/build_plugin.py --output /absolute/output.zip`. The package contains a commit and SHA256 manifest. Reconcile independent target overlays before staging or deployment; uploading this release is a separate operation from merging its source.
+
+## Admin navigation — 0.6.25-preview
+
+The plugin is named SMM Pro Analytics and owns a top-level WordPress admin menu with Dashboard and Review Settings. Legacy Tools routes remain registered for bookmarks but are hidden from the Tools menu. New form returns use the top-level admin routes. All 0.6.24 document and Review fixes are retained.

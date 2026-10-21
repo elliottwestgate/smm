@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Westgate Practicum Pro
+ * Plugin Name: SMM Pro Analytics
  * Description: Company analytics dashboard and queued performance reviews within WordPress. Native Google Analytics, Constant Contact reporting and Facebook Page pilot.
- * Version: 0.6.24-preview
+ * Version: 0.6.25-preview
  * Author: Westgate Marketing
  * Requires PHP: 8.0
  * License: GPL-2.0-or-later
@@ -45,6 +45,7 @@ final class Westgate_Practicum_Pro {
         add_action('admin_post_wgpp_sample', ['WGPP_Analytics','sample']);
         add_action('admin_post_wgpp_import', ['WGPP_Analytics', 'import']);
         add_action('admin_menu', [__CLASS__, 'menu']);
+        add_action('admin_menu', [__CLASS__, 'hide_legacy_menu'], 99);
         add_action('admin_enqueue_scripts', [__CLASS__, 'styles']);
         add_action('wp_enqueue_scripts', [__CLASS__, 'styles']);
         add_shortcode('westgate_practicum_pro', [__CLASS__, 'render']);
@@ -61,19 +62,27 @@ final class Westgate_Practicum_Pro {
     }
     public static function styles($hook = '') {
         global $post;
-        if ($hook === 'tools_page_wgpp-preview' || (!is_admin() && $post && has_shortcode($post->post_content, 'westgate_practicum_pro'))) {
+        if (in_array($hook, ['tools_page_wgpp-preview','toplevel_page_wgpp-preview'], true) || (!is_admin() && $post && has_shortcode($post->post_content, 'westgate_practicum_pro'))) {
             wp_enqueue_style('wgpp', plugins_url('portal.css', __FILE__), [], '0.6.6-preview');
         }
     }
     public static function menu() {
-        add_management_page('Practicum Pro Preview', 'Practicum Pro Preview', 'manage_options', 'wgpp-preview', [__CLASS__, 'admin_page']);
+        add_menu_page('SMM Pro Analytics', 'SMM Pro Analytics', 'manage_options', 'wgpp-preview', [__CLASS__, 'admin_page'], 'dashicons-chart-area', 26);
+        add_submenu_page('wgpp-preview', 'SMM Pro Analytics Dashboard', 'Dashboard', 'manage_options', 'wgpp-preview', [__CLASS__, 'admin_page']);
+        add_submenu_page('wgpp-preview', 'SMM Pro Analytics Review Settings', 'Review Settings', 'manage_options', 'wgpp-pro-review', ['WGPP_Pro_Review','settings_page']);
+        // Retain registered legacy routes for bookmarks, but remove them from Tools.
+        add_management_page('SMM Pro Analytics', 'SMM Pro Analytics', 'manage_options', 'wgpp-preview', [__CLASS__, 'admin_page']);
+    }
+    public static function hide_legacy_menu() {
+        remove_submenu_page('tools.php', 'wgpp-preview');
+        remove_submenu_page('tools.php', 'wgpp-pro-review');
     }
     public static function admin_page() {
         if (!current_user_can('manage_options')) { return; }
-        echo '<div class="wrap">' . self::render() . '</div>';
+        echo '<div class="wrap"><h1>SMM Pro Analytics</h1>' . self::render() . '</div>';
     }
     private static function return_url() {
-        return is_admin() ? admin_url('tools.php?page=wgpp-preview') : get_permalink();
+        return is_admin() ? admin_url('admin.php?page=wgpp-preview') : get_permalink();
     }
     private static function allowed() {
         return is_user_logged_in() && (current_user_can('manage_options') || current_user_can('westgate_practicum_access') || WGPP_Company::can('view') || WGPP_WishList::can_create());
