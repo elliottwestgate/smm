@@ -146,3 +146,7 @@ Production file-editor changes are prohibited by `AGENTS.md`. Build only committ
 ## Admin navigation — 0.6.25-preview
 
 The plugin is named SMM Pro Analytics and owns a top-level WordPress admin menu with Dashboard and Review Settings. Legacy Tools routes remain registered for bookmarks but are hidden from the Tools menu. New form returns use the top-level admin routes. All 0.6.24 document and Review fixes are retained.
+
+## Company administration landing — 0.6.26-preview
+
+The WordPress admin Dashboard now opens a company administration index, independent of the last selected customer workspace. It lists company owners, member counts, current-user access, and explicit front-side Report, Reviews and Manage Account links. It does not load provider analytics or generate Reviews. Existing company access controls remain enforced.
