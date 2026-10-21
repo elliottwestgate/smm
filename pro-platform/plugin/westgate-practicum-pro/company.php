@@ -91,7 +91,7 @@ final class WGPP_Company {
     }
     public static function asset_version($src,$handle){
         if(!str_starts_with($handle,'wgpp')){return $src;}
-        $version='0.6.24-preview';$path=parse_url($src,PHP_URL_PATH);
+        $version='0.6.25-preview';$path=parse_url($src,PHP_URL_PATH);
         if(is_string($path)&&preg_match('~/(assets/[a-zA-Z0-9._-]+\.(?:js|css)|portal\.css)$~D',$path,$match)){
             $file=__DIR__.'/'.$match[1];if(is_file($file)){$version=substr(hash_file('sha256',$file),0,16);}
         }
@@ -395,7 +395,7 @@ final class WGPP_WishList {
         if(!function_exists('wlmapi_get_level_pages')||!function_exists('wlmapi_add_page_to_level')){wp_die('WishList API is unavailable.');}
         $ids=[];foreach(['1571692156','1531756603','1531866216','1531866359','1532527828','1532527875','1532527893','1532527906','1532527933'] as $level){$r=wlmapi_get_level_pages($level);if(empty($r['success'])||!is_array($r['pages']['page'] ?? null)){wp_die('Could not read the course access collection. No complete synchronization was confirmed.');}foreach($r['pages']['page'] as $page){$id=(int)($page['ID'] ?? 0);if($id && get_post_type($id)==='page'){$ids[$id]=$id;}}}
         if(!$ids){wp_die('No curriculum pages found.');}foreach(self::LEVELS as $level){$r=wlmapi_add_page_to_level($level,['ContentIds'=>array_values($ids)]);if(empty($r['success'])){wp_die('Curriculum synchronization did not complete. Retry to finish; existing access is preserved.');}}
-        update_option('_wgpp_pro_curriculum_sync',['count'=>count($ids),'at'=>gmdate('c')],false);wp_safe_redirect(admin_url('tools.php?page=wgpp-pro-review&curriculum=1'));exit;
+        update_option('_wgpp_pro_curriculum_sync',['count'=>count($ids),'at'=>gmdate('c')],false);wp_safe_redirect(admin_url('admin.php?page=wgpp-pro-review&curriculum=1'));exit;
     }
     public static function membership($user){$user=(int)$user;if(array_key_exists($user,self::$member_cache)){return self::$member_cache[$user];}self::$member_cache[$user]=null;if(!$user||!function_exists('wlmapi_get_member')){return null;}try{$r=wlmapi_get_member((int)$user);if(!self::active($r)){return null;}foreach($r['member'] as $member){foreach(($member['Levels'] ?? []) as $id=>$v){$v=(array)$v;if(in_array((string)($v['Level_ID'] ?? $id),self::LEVELS,true)&&in_array($v['Active'] ?? null,[1,'1',true],true)&&empty($v['Cancelled'])&&empty($v['Pending'])&&empty($v['UnConfirmed'])&&empty($v['Expired'])){return self::$member_cache[$user]=$v;}}}}catch(Throwable $e){}return null;}
     public static function window($stamp,$now){

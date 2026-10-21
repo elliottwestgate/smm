@@ -71,7 +71,7 @@ final class WGPP_Pro_Review {
         if(!preg_match('/^[a-zA-Z0-9._:-]{1,100}$/D',$model)||($key!=='' && (strlen($key)<20||strlen($key)>1000||preg_match('/\s/',$key)))){wp_die('Enter a valid model ID and API key.');}
         $data=['model'=>$model,'key'=>$key ?: ($old['key'] ?? ''),'enabled'=>isset($_POST['review_ai_enabled'])];
         update_option(self::OPTION,WGPP_Google::encrypt($data,'pro-review:application'),false);
-        wp_safe_redirect(admin_url('tools.php?page=wgpp-pro-review&saved=1'));exit;
+        wp_safe_redirect(admin_url('admin.php?page=wgpp-pro-review&saved=1'));exit;
     }
     public static function settings_page(){
         if(!current_user_can('manage_options')){return;}$s=self::settings();
