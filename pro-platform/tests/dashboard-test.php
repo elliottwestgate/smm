@@ -21,7 +21,7 @@ function delete_transient($key){}
 function get_userdata($id){return (object)['ID'=>$id,'display_name'=>'Example owner','user_email'=>'member'.$id.'@example.com','user_pass'=>'test-hash'];}
 function wp_get_current_user(){return get_userdata(get_current_user_id());}
 function esc_textarea($v){return htmlspecialchars((string)$v,ENT_QUOTES);}
-function get_post($id){return $id?(object)['post_type'=>'wgpp_company','post_status'=>'private','post_author'=>1,'post_title'=>'Example']:null;}
+function get_post($id){return $id?(object)['ID'=>(int)$id,'post_type'=>'wgpp_company','post_status'=>'private','post_author'=>1,'post_title'=>'Example']:null;}
 function get_post_meta($id,$key,$single){global $uid,$role,$meta;return $key==='_wgpp_members'?[$uid=>$role]:($meta[$id][$key]??null);}
 $reviewReady=false;$reviewCalls=[];
 function apply_filters($name,$value,...$args){
