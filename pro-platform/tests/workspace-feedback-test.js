@@ -1,0 +1,14 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const source=fs.readFileSync(__dirname+'/../plugin/westgate-practicum-pro/assets/portal.js','utf8');
+const start=source.indexOf(' function progressTone('),end=source.indexOf(' for(const node of [reportStatus,reviewStatus])',start);
+const node=()=>({hidden:false,textContent:'',dataset:{},classList:{toggle(){}}});
+const reportStatus=node(),reviewStatus=node(),progress=node(),actions=node(),reportExport=node(),reviewExport=node(),saved={hidden:true};
+const root={querySelector:()=>saved};const ctx={root,reportStatus,reviewStatus,progress,actions,reportExport,reviewExport};vm.createContext(ctx);vm.runInContext("let currentPrimary='report';"+source.slice(start,end),ctx);
+reportStatus.textContent='Loading selected dates… The previous report remains visible until the new report is ready.';root.wgppSyncActions();assert(!progress.hidden);assert.equal(progress.dataset.tone,'loading');assert(progress.textContent.startsWith('In progress'));assert(!reportExport.hidden);assert(reviewExport.hidden);
+reportStatus.textContent='Selected dates could not be loaded. The previous report has not been changed.';root.wgppSyncActions();assert.equal(progress.dataset.tone,'error');
+reportStatus.textContent='Dates changed. Select Apply dates to load this range.';root.wgppSyncActions();assert.equal(progress.dataset.tone,'notice');
+reportStatus.textContent='07/21/2026 to 10/18/2026 · Connected provider';root.wgppSyncActions();assert(progress.hidden);
+vm.runInContext("currentPrimary='review'",ctx);reviewStatus.textContent='Preparing Pro Analytics Review… Your selected evidence is saved.';root.wgppSyncActions();assert.equal(progress.dataset.tone,'loading');assert(actions.hidden);
+saved.hidden=false;root.wgppSyncActions();assert(progress.hidden);assert(!actions.hidden);assert(reportExport.hidden);assert(!reviewExport.hidden);
+vm.runInContext("currentPrimary='account'",ctx);root.wgppSyncActions();assert(actions.hidden);assert(progress.hidden);
+console.log('PASS progress distinguishes loading, errors, unapplied dates and completion; export toolbar follows Report, saved Review and Account');

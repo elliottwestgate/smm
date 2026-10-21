@@ -1,0 +1,34 @@
+[
+  {
+    "id": "2800",
+    "html": "<p><strong>Email Campaign ID Reminder</strong></p>\n<p>Reminder, you MUST do this next step for<strong><em> EACH EMAIL</em></strong> that you compose and send out to your list.  </p>\n<p>After EACH email that you send out from MailChimp, you will need to go into the email and collect the actual campaign number for that specific email.  If you don’t do this after each email you send, then your grade will not include these numbers, which will significantly hurt your grade.  It is your responsibility to make sure to do this step after creating each email. </p>\n<p>First, in your MailChimp account, click on “Campaigns” in the Top Menu Bar.  On the campaign screen, click in the space around the email that you need to record in your Social Media Magnet Analytics Plugin.  Don’t click on the link to take you into the email, but just click around it.  This will make the “View Report” option appear to the right of the email statistics.  In the “View Report” drop-down menu, click on the “view email” option provided, like demonstrated below:</p>\n<p><img class=\"aligncenter size-large wp-image-2797\" src=\"https://socialmediamagnetpro.com/wp-content/uploads/u-1-1024x356.png\" alt=\"\" width=\"688\" height=\"239\" /></p>\n<p>In this view email screen, you need to scroll to the bottom of the screen and <strong><em>RIGHT-CLICK </em></strong>on the “unsubscribe from this list” hyperlink.  When you right-click, it will bring up an option list.  Choose the “Copy Link Location” from the option menu. </p>\n<p><img class=\"aligncenter size-full wp-image-2802\" src=\"https://socialmediamagnetpro.com/wp-content/uploads/v1.png\" alt=\"\" width=\"896\" height=\"742\" /></p>\n<p>Next, go back to your Website Analytics Plugin Settings.  Paste the Link that you just copied into the appropriate Email # Campaign ID field.  When you paste it, it will look like this:</p>\n<p><img class=\"aligncenter size-large wp-image-2803\" src=\"https://socialmediamagnetpro.com/wp-content/uploads/v2-1024x471.png\" alt=\"\" width=\"688\" height=\"316\" /></p>\n<p>Next, you want to delete everything at and before the last equals (=) sign in this link.  So that only the Campaign ID # is left in the appropriate Email # Campaign ID field.  It should look like the following picture when you are finished:</p>\n<p><img class=\"aligncenter size-large wp-image-2804\" src=\"https://socialmediamagnetpro.com/wp-content/uploads/v3-1024x477.png\" alt=\"\" width=\"688\" height=\"320\" /></p>\n<p>Again, for EACH EMAIL that you send your subscribers, you will perform this process to enter the correct Campaign ID into your MailChimp Settings tab of the Website Analytics Plugin Settings, as indicated below.  If you don’t do this correctly, your grade will be affected.</p>\n<p><img class=\"aligncenter size-full wp-image-2798\" src=\"https://socialmediamagnetpro.com/wp-content/uploads/w.png\" alt=\"\" width=\"961\" height=\"585\" /></p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>",
+    "links": [
+      "https://socialmediamagnetpro.com/?page_id=2800&preview=true"
+    ],
+    "title": "8.A-2 Email Campaign ID Reminder"
+  },
+  {
+    "id": "5921",
+    "html": "<p><strong>6.A-2 MailChimp Security Form Request</strong>:</p>\n<p><em><span id=\"nf-drawer-content\"><span class=\"nf-setting-groups\"><span class=\"nf-field-settings\"><b>Complete this form if you would like us to help you with your MailChimp account.</b></span></span></span></em></p>\n<p><span id=\"nf-drawer-content\"><span class=\"nf-setting-groups\"><span class=\"nf-field-settings\"><b>DIRECTIONS:</b>  Once you have created your MailChimp account, be sure to completely set up your entire profile, which includes the Profile tabs of 1) Details, 2) Users, 3) Security, 4) Contact Information, and 5) Domains.  As you complete the Security information, you need to \"ENABLE\" the section that says \"Verify identity with Security Questions.\"  Then you will need to pick three security questions and answer those appropriately.  Save the new settings and then provide us with your questions and answers so that we can access your email account should there ever be a grading issue with your email metrics.  Note: If you ever change your MailChimp Login Password, you will need to fill this form out again so that we have your most recent login information up to date.  Thank You.</span></span></span></p>\n<p>[ninja_form id=22] <strong> </strong></p>",
+    "links": [
+      "https://socialmediamagnetpro.com/smm-course/level-3/chapter-6-content-management-planning-the-campaign/6-4-summary-and-review/6-a-assignments/6-a-2-mailchimp-security-form-request/"
+    ],
+    "title": "6.A-2 MailChimp Security Form Request"
+  },
+  {
+    "id": "2489",
+    "html": "<p><strong>Magnet Analytics</strong> - <a href=\".../professor-grading-module-preview/\">Grading Preview</a></p>",
+    "links": [
+      "https://socialmediamagnetpro.com/live-campaign-analytics/"
+    ],
+    "title": "Live Campaign Analytics"
+  },
+  {
+    "id": "2487",
+    "html": "",
+    "links": [
+      "https://socialmediamagnetpro.com/member-analytics/"
+    ],
+    "title": "Member Analytics"
+  }
+]

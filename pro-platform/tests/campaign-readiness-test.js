@@ -1,0 +1,16 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const base=__dirname+'/../plugin/westgate-practicum-pro/assets/';
+const analytics=fs.readFileSync(base+'analytics.js','utf8'),reviews=fs.readFileSync(base+'reviews.js','utf8');
+const update=analytics.slice(analytics.indexOf('function updateCampaign()'),analytics.indexOf('root.wgppCampaignChannel='));
+const handler=reviews.slice(reviews.indexOf(" root.addEventListener('wgpp:evidence'"),reviews.indexOf(" form.addEventListener('change'"));
+const events={},root={wgppLoadedSelection:{comparison:'prior'},querySelector(){return null;},addEventListener(name,fn){events[name]=fn;},dispatchEvent(e){events[e.type]?.();}};
+const channels={facebook:{status:'loading'},instagram:{status:'complete'}};
+const request={classList:{toggle(){}}},confirm={hidden:true},status={textContent:''},context={root,campaignChannels:channels,campaignSnapshot:{},state:{analysis:{}},setPrint(){},config:{can_review:true},busy:false,request,confirm,status,CustomEvent:class{constructor(type){this.type=type;}}};
+vm.createContext(context);vm.runInContext(reviews.slice(reviews.indexOf(' function syncRequest()'),reviews.indexOf(' function reviewView('))+handler+update,context);
+vm.runInContext('updateCampaign()',context);assert.equal(root.wgppEvidenceReady,false);assert.equal(request.disabled,true,'Review waits for Awareness evidence');
+channels.facebook={status:'complete'};vm.runInContext('updateCampaign()',context);assert.equal(root.wgppEvidenceReady,true);assert.equal(request.disabled,false);
+channels.instagram={status:'loading'};vm.runInContext('updateCampaign()',context);assert.equal(request.disabled,true);
+channels.instagram={status:'unavailable',message:'Not connected'};vm.runInContext('updateCampaign()',context);assert.equal(request.disabled,false,'terminal unavailable result allows a review with explicit missing evidence');
+root.wgppLoadedSelection={comparison:'none'};events['wgpp:evidence']();assert.equal(request.disabled,true,'comparison off still blocks a movement review');
+root.wgppLoadedSelection=null;events['wgpp:evidence']();assert.equal(request.disabled,true,'unapplied dates cannot create a review');
+console.log('PASS Review gating waits for channel collection, handles explicit gaps, and preserves comparison/date checks');
