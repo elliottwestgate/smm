@@ -1,0 +1,34 @@
+<?php
+require __DIR__.'/cc-native-test.php';
+$GLOBALS['allowed']=true;$GLOBALS['gets']=[];$GLOBALS['meta']=[];
+$key=str_repeat('a',32).'-us1';$a=WGPP_Mailchimp::credentials($key);
+check($a['server']==='us1','Mailchimp server derived only from a validated key suffix');
+foreach(['','bad-key','https://evil.example',str_repeat('a',32).'-us1.evil.example',str_repeat('a',32)."-us1\r\nHeader: injected"] as $keyBad){rejected(fn()=>WGPP_Mailchimp::credentials($keyBad),'Reject malformed key and arbitrary request hosts');}
+$a['audience']='list1';$a['audience_name']='V1Moto';$a['account']='Company Mailchimp';
+$envelope=WGPP_Google::encrypt($a,'mailchimp:auth:1');$GLOBALS['meta'][1][WGPP_Mailchimp::AUTH]=$envelope;$GLOBALS['meta'][1]['_wgpp_email_provider']='mailchimp';
+rejected(fn()=>WGPP_Google::decrypt($envelope,'mailchimp:auth:2'),'Mailchimp credentials cannot cross companies');
+rejected(fn()=>WGPP_Google::decrypt($envelope,'company:1'),'Mailchimp credentials cannot be confused with a Google grant');
+check(WGPP_Mailchimp::provider(1)==='mailchimp'&&WGPP_Mailchimp::provider(2)==='','Provider belongs to company, not shared login');
+$rawMC=['id'=>'campaign1','list_id'=>'list1','send_time'=>'2026-10-01T02:00:00Z','emails_sent'=>100,'opens'=>['unique_opens'=>40,'opens_total'=>90],'clicks'=>['unique_subscriber_clicks'=>8,'unique_clicks'=>20,'clicks_total'=>42],'bounces'=>['hard_bounces'=>2,'soft_bounces'=>1],'unsubscribed'=>1];
+$rowMC=WGPP_Mailchimp::normalize($rawMC);
+check($rowMC['counts']['opens']===40 && $rowMC['counts']['clicks']===8 && $rowMC['counts']['bounces']===3,'Unique recipients and hard plus soft bounces normalize correctly');
+$summaryMC=WGPP_CC_Reports::summarize([$rowMC],'2026-09-30','2026-09-30','America/Chicago');
+check($summaryMC['metrics']['sends']===100 && $summaryMC['metrics']['delivered']===97 && $summaryMC['metrics']['click_rate']===8,'Mailchimp totals use local campaign date and the existing sent-based rates');
+$bad=$rawMC;unset($bad['clicks']['unique_subscriber_clicks']);rejected(fn()=>WGPP_Mailchimp::normalize($bad),'Missing unique click count never becomes zero or total clicks');
+$bad=$rawMC;$bad['bounces']['hard_bounces']=101;rejected(fn()=>WGPP_Mailchimp::normalize($bad),'Impossible delivery counts rejected');
+rejected(fn()=>WGPP_Mailchimp::api($a,'/contacts'),'Connector never exposes individual contact endpoints');
+rejected(fn()=>WGPP_Mailchimp::api(array_replace($a,['server'=>'evil.example']),'/reports'),'Credentials cannot be sent to arbitrary server');
+check(WGPP_CC_Reports::request(1)['status']==='queued','Shared email reporting routes selected Mailchimp provider');
+$other=$rawMC;$other['id']='other-company-campaign';$other['list_id']='list2';
+$GLOBALS['get_responses']=[['code'=>200,'body'=>['reports'=>[$other],'total_items'=>2]],['code'=>200,'body'=>['reports'=>[$rawMC],'total_items'=>2]]];
+$first=WGPP_CC_Reports::progress(1);check($first['status']==='queued' && count($first['rows'])===0,'Other audience excluded and partial history remains unpublished');
+$second=WGPP_CC_Reports::progress(1);check($second['status']==='complete' && count($second['rows'])===1 && isset($second['rows']['campaign1']),'Only selected audience published after complete pagination');
+check(count($GLOBALS['gets'])===2 && str_starts_with($GLOBALS['gets'][0][0],'https://us1.api.mailchimp.com/3.0/reports?'),'Reporting uses only fixed Mailchimp GET host');
+check($GLOBALS['gets'][0][1]['redirection']===0 && $GLOBALS['gets'][0][1]['headers']['Authorization']==='Bearer '.$key,'Bearer key never follows redirects');
+check(!str_contains(json_encode($second),$key)&&!str_contains(json_encode($second),'list2'),'Published cache excludes credentials and other audiences');
+check(WGPP_CC_Reports::request(2)['status']==='not_selected','Unconfigured company never inherits Mailchimp data');
+rejected(fn()=>WGPP_Mailchimp::progress(2),'Mailchimp progress requires matching company membership');
+$GLOBALS['allowed']=false;rejected(fn()=>WGPP_Mailchimp::progress(1),'Revoked member cannot collect Mailchimp reports');$GLOBALS['allowed']=true;
+$GLOBALS['meta'][1][WGPP_Mailchimp::CACHE]['updated']=0;$GLOBALS['get_responses']=[['code'=>429,'body'=>[]]];
+check(WGPP_Mailchimp::progress(1)['status']==='failed' && !isset($GLOBALS['meta'][1][WGPP_Mailchimp::CACHE]['rows']),'Rate limits fail without publishing partial totals');
+$GLOBALS['meta'][1]['_wgpp_email_provider']='none';check(WGPP_CC_Reports::request(1)['status']==='not_used','Turning off email reporting suppresses stored provider data');

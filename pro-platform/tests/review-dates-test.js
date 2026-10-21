@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const source=fs.readFileSync(__dirname+'/../plugin/westgate-practicum-pro/assets/reviews.js','utf8');
+const formatters=source.slice(source.indexOf(' const date='),source.indexOf(' let tableParent='));
+const context={Date,Intl};vm.createContext(context);vm.runInContext(formatters+';this.formatDate=date;this.formatCentral=centralTime;',context);
+assert.equal(context.formatDate('2026-10-18'),'10/18/2026');
+assert.equal(context.formatCentral('2026-10-18T21:07:06+00:00'),'10/18/2026 4:07 PM Central Time');
+assert.equal(context.formatCentral('2026-01-18T21:07:06Z'),'01/18/2026 3:07 PM Central Time');
+assert.equal(context.formatCentral('2026-11-01T06:30:00Z'),'11/01/2026 1:30 AM Central Time');
+assert.equal(context.formatCentral('invalid'),'Date unavailable');
+console.log('PASS review dates use four-digit years and Central Time with DST, minutes only, no raw ISO or UUID');

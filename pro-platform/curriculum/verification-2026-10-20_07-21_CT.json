@@ -1,0 +1,455 @@
+{
+  "site": "socialmediamagnetpro.com",
+  "results": [
+    {
+      "id": "1265",
+      "expected": "7.1 Preparing to Track the Campaign",
+      "title": "7.1 Preparing to Track the Campaign",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-7-campaign-goals-tracking-the-campaign/7-1-preparing-to-track-the-campaign/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 2563
+    },
+    {
+      "id": "1268",
+      "expected": "7.2 Platform Insights for Social Acquisition",
+      "title": "7.2 Platform Insights for Social Acquisition",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-7-campaign-goals-tracking-the-campaign/7-2-platform-insights-for-social-acquisition/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 2494
+    },
+    {
+      "id": "1273",
+      "expected": "7.3 Pro Analytics: Traffic Coming into the Website",
+      "title": "7.3 Pro Analytics: Traffic Coming into the Website",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-7-campaign-goals-tracking-the-campaign/7-3-google-analytics-traffic-coming-into-the-website/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 2863
+    },
+    {
+      "id": "1278",
+      "expected": "7.4 Pro Analytics and GA4: Behavior Within the Website",
+      "title": "7.4 Pro Analytics and GA4: Behavior Within the Website",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-7-campaign-goals-tracking-the-campaign/7-4-google-analytics-traffic-within-and-leaving-the-website/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 2590
+    },
+    {
+      "id": "1285",
+      "expected": "7.5 GA4 Events and the Goal Funnel",
+      "title": "7.5 GA4 Events and the Goal Funnel",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-7-campaign-goals-tracking-the-campaign/7-5-google-analytics-traffic-moving-through-the-goal-funnel/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 2609
+    },
+    {
+      "id": "1290",
+      "expected": "7.6 Email Statistics for Consumer Retention",
+      "title": "7.6 Email Statistics for Consumer Retention",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-7-campaign-goals-tracking-the-campaign/7-6-email-statistics-for-consumer-retention/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 2296
+    },
+    {
+      "id": "1294",
+      "expected": "7.7 Progress Reports and Pro Analytics Reviews",
+      "title": "7.7 Progress Reports and Pro Analytics Reviews",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-7-campaign-goals-tracking-the-campaign/7-7-progress-reports/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 3255
+    },
+    {
+      "id": "1297",
+      "expected": "7.8 Summary and Business Review",
+      "title": "7.8 Summary and Business Review",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-7-campaign-goals-tracking-the-campaign/7-8-summary-and-review/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 1303
+    },
+    {
+      "id": "3066",
+      "expected": "7.A-1 Pro Analytics Setup and Quick Start",
+      "title": "7.A-1 Pro Analytics Setup and Quick Start",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-7-campaign-goals-tracking-the-campaign/7-8-summary-and-review/7-a-assignments/7-a-1-live-campaign-setup-confirmation-instructions/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 3832
+    },
+    {
+      "id": "1312",
+      "expected": "7.A-2 Goal Measurement Action Plan",
+      "title": "7.A-2 Goal Measurement Action Plan",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-7-campaign-goals-tracking-the-campaign/7-8-summary-and-review/7-a-assignments/7-a-2-google-analytics-assignment/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 1248
+    },
+    {
+      "id": "1412",
+      "expected": "10.A-2 Campaign Progress Action Plan",
+      "title": "10.A-2 Campaign Progress Action Plan",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-4/chapter-10-customer-retention-strategic-email-campaigns/10-3-summary-and-review/10-a-assignments/10-a-2-progress-report/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 1302
+    },
+    {
+      "id": "1819",
+      "expected": "13.A1 Email Performance Action Plan",
+      "title": "13.A1 Email Performance Action Plan",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-5/chapter-13-email-analysis-improving-campaign-response/13-2-summary-and-review/13-a-assignments/13-a1-email-analysis-assignment/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 1251
+    },
+    {
+      "id": "1893",
+      "expected": "14.A1 Closing the Loop: Brand and Campaign Action Plan",
+      "title": "14.A1 Closing the Loop: Brand and Campaign Action Plan",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-6/chapter-14-the-brand-axis-strategic-impacts-of-loyalty-and-engagement/14-5-summary-and-review/14-a-assignments/14-a1-closing-the-loop-assignment/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 1305
+    },
+    {
+      "id": "1980",
+      "expected": "Campaign Results and Forward Plan",
+      "title": "Campaign Results and Forward Plan",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-7/final-report/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 1748
+    },
+    {
+      "id": "1300",
+      "expected": "7.A Campaign Action Plans",
+      "title": "7.A Campaign Action Plans",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-7-campaign-goals-tracking-the-campaign/7-8-summary-and-review/7-a-assignments/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 329
+    },
+    {
+      "id": "1817",
+      "expected": "13.A Email Action Plan",
+      "title": "13.A Email Action Plan",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-5/chapter-13-email-analysis-improving-campaign-response/13-2-summary-and-review/13-a-assignments/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 280
+    },
+    {
+      "id": "1891",
+      "expected": "14.A Brand and Campaign Action Plan",
+      "title": "14.A Brand and Campaign Action Plan",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-6/chapter-14-the-brand-axis-strategic-impacts-of-loyalty-and-engagement/14-5-summary-and-review/14-a-assignments/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 310
+    },
+    {
+      "id": "1769",
+      "expected": "12.4 Social Channels: From Content Signals to Website Visits",
+      "title": "12.4 Social Channels: From Content Signals to Website Visits",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-5/chapter-12-spoke-analysis-social-media-analysis/12-4-additional-social-media-channel-insights/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 1716
+    },
+    {
+      "id": "1810",
+      "expected": "13.1 Email Reporting: Strengthen the Return Path",
+      "title": "13.1 Email Reporting: Strengthen the Return Path",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-5/chapter-13-email-analysis-improving-campaign-response/13-1-email-reporting/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 2844
+    },
+    {
+      "id": "1815",
+      "expected": "13.2 Email Summary and Business Review",
+      "title": "13.2 Email Summary and Business Review",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-5/chapter-13-email-analysis-improving-campaign-response/13-2-summary-and-review/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 1125
+    },
+    {
+      "id": "1880",
+      "expected": "14.3 The Brand Axis",
+      "title": "14.3 The Brand Axis",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-6/chapter-14-the-brand-axis-strategic-impacts-of-loyalty-and-engagement/14-3-the-brand-axis/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 7322
+    },
+    {
+      "id": "1885",
+      "expected": "14.4 The Strategic Impact of the Brand Axis",
+      "title": "14.4 The Strategic Impact of the Brand Axis",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-6/chapter-14-the-brand-axis-strategic-impacts-of-loyalty-and-engagement/14-4-the-strategic-impact-of-the-brand-axis/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 5794
+    },
+    {
+      "id": "1899",
+      "expected": "15.1 Strategic Misalignments in Each Brand Axis Quadrant",
+      "title": "15.1 Strategic Misalignments in Each Brand Axis Quadrant",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-6/chapter-15-balance-re-aligning-the-message-magnet/15-1-strategic-misalignments-in-each-brand-axis-quadrant/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 6427
+    },
+    {
+      "id": "1901",
+      "expected": "15.2 Quadrant A: Acquisition Focus within Environmental Uncertainty",
+      "title": "15.2 Quadrant A: Acquisition Focus within Environmental Uncertainty",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-6/chapter-15-balance-re-aligning-the-message-magnet/15-2-quadrant-a-acquisition-focus-within-environmental-uncertainty/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 7026
+    },
+    {
+      "id": "1906",
+      "expected": "15.3 Quadrant B: Retention Focus within Environmental Uncertainty",
+      "title": "15.3 Quadrant B: Retention Focus within Environmental Uncertainty",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-6/chapter-15-balance-re-aligning-the-message-magnet/15-3-quadrant-b-retention-focus-within-environmental-uncertainty/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 5979
+    },
+    {
+      "id": "1911",
+      "expected": "15.4 Quadrant C: Retention Focus within Competitive Intensity",
+      "title": "15.4 Quadrant C: Retention Focus within Competitive Intensity",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-6/chapter-15-balance-re-aligning-the-message-magnet/15-4-quadrant-c-retention-focus-within-competitive-intensity/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 5639
+    },
+    {
+      "id": "1919",
+      "expected": "15.5 Quadrant D: Acquisition Focus within Competitive Intensity",
+      "title": "15.5 Quadrant D: Acquisition Focus within Competitive Intensity",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-6/chapter-15-balance-re-aligning-the-message-magnet/15-5-quadrant-d-acquisition-focus-within-competitive-intensity/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 5641
+    },
+    {
+      "id": "1916",
+      "expected": "15.6 The Remedy to Magnetic Misalignment",
+      "title": "15.6 The Remedy to Magnetic Misalignment",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-6/chapter-15-balance-re-aligning-the-message-magnet/15-6-the-remedy-to-magnetic-misalignment/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 6253
+    },
+    {
+      "id": "427",
+      "expected": "1.4 A New Inbound Model: The Social Media Magnet",
+      "title": "1.4 A New Inbound Model: The Social Media Magnet",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-1/chapter-1-introducing-the-social-magnet/1-4-a-new-inbound-model-the-social-media-magnet/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 7267
+    },
+    {
+      "id": "502",
+      "expected": "2.6 Your Brand is the Balancing Force in the Social Magnet",
+      "title": "2.6 Your Brand is the Balancing Force in the Social Magnet",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-1/chapter-2-creating-the-brand-hub-four-key-brand-elements/2-6-your-brand-is-the-balancing-force-in-the-social-magnet/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 2757
+    },
+    {
+      "id": "515",
+      "expected": "3.2 Historical Market Segmentation, Targeting, and Positioning Principles",
+      "title": "3.2 Historical Market Segmentation, Targeting, and Positioning Principles",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-2/chapter-3-defining-the-infinity-loop-segmentation-targeting-positioning/3-2-historical-market-segmentation-targeting-and-positioning-principles/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 5862
+    },
+    {
+      "id": "517",
+      "expected": "3.3 Segmentation, Targeting, and Positioning in a Digital Context",
+      "title": "3.3 Segmentation, Targeting, and Positioning in a Digital Context",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-2/chapter-3-defining-the-infinity-loop-segmentation-targeting-positioning/3-3-segmentation-targeting-and-positioning-in-a-digital-context/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 10201
+    },
+    {
+      "id": "1136",
+      "expected": "4.2 Message Harmony and Serialization",
+      "title": "4.2 Message Harmony and Serialization",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-2/chapter-4-creating-the-message-magnet-message-serialization/4-2-message-harmony-and-serialization/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 4988
+    },
+    {
+      "id": "540",
+      "expected": "4.3 The Message Matrix: Turning Marketing Principles into Inbound Strategy",
+      "title": "4.3 The Message Matrix: Turning Marketing Principles into Inbound Strategy",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-2/chapter-4-creating-the-message-magnet-message-serialization/4-3-the-message-matrix-turning-marketing-principles-into-inbound-strategy/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 4483
+    },
+    {
+      "id": "702",
+      "expected": "5.3 Retention Post-Follower Email Campaigns",
+      "title": "5.3 Retention Post-Follower Email Campaigns",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-2/chapter-5-magnetic-impulses-brand-spokes-and-message-distribution/5-3-retention-post-follower-email-campaigns/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 5987
+    },
+    {
+      "id": "1328",
+      "expected": "6.3 Designing the Editorial Calendar:  Planning Content",
+      "title": "6.3 Designing the Editorial Calendar:  Planning Content",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-6-content-management-planning-the-campaign/6-3-designing-the-editorial-calendar-planning-content/",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "length": 8233
+    },
+    {
+      "id": "1418",
+      "expected": "8.4 WordPress Blog Creation: Steps to Optimize Performance",
+      "title": "8.4 WordPress Blog Creation: Steps to Optimize Performance",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-4/chapter-8-hub-maintenance-content-creation-curation/8-4-wordpress-blog-creation-steps-to-optimize-performance/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 7304
+    },
+    {
+      "id": "1444",
+      "expected": "9.4 Social Formatting: Steps to Optimize Your Social Referrals to the Hub",
+      "title": "9.4 Social Formatting: Steps to Optimize Your Social Referrals to the Hub",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-4/chapter-9-spoke-structure-social-formatting/9-4-social-formatting-steps-to-optimize-your-social-referrals-to-the-hub/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 5452
+    },
+    {
+      "id": "1652",
+      "expected": "11.2 SEO Tools & Setting Up Yoast SEO on WordPress",
+      "title": "11.2 SEO Tools & Setting Up Yoast SEO on WordPress",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-5/chapter-11-hub-analysis-wordpress-and-seo-configuration/11-2-seo-tools-setting-up-yoast-seo-on-wordpress/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 5691
+    },
+    {
+      "id": "1668",
+      "expected": "11.3 How to Use the Yoast SEO Plugin to Maximize Search Engine Results",
+      "title": "11.3 How to Use the Yoast SEO Plugin to Maximize Search Engine Results",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-5/chapter-11-hub-analysis-wordpress-and-seo-configuration/11-3-how-to-use-the-yoast-seo-plugin-to-maximize-search-engine-results/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 7207
+    },
+    {
+      "id": "1737",
+      "expected": "12.2 Facebook User Displeasure Actually Leads to Less, but Better Organic Content",
+      "title": "12.2 Facebook User Displeasure Actually Leads to Less, but Better Organic Content",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-5/chapter-12-spoke-analysis-social-media-analysis/12-2-facebook-user-displeasure-actually-leads-to-less-but-better-organic-content/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 5642
+    },
+    {
+      "id": "8082",
+      "expected": "2.A-4c Connect Pro Analytics",
+      "title": "2.A-4c Connect Pro Analytics",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-1/chapter-2-creating-the-brand-hub-four-key-brand-elements/2-7-summary-and-review/2-a-assignments/2-a-4-student-website-setup-instructions/2-a-4c-social-media-magnet-plugin-setup/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 1143
+    },
+    {
+      "id": "8078",
+      "expected": "2.A-4b Email Signup, Forms and Measurement",
+      "title": "2.A-4b Email Signup, Forms and Measurement",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-1/chapter-2-creating-the-brand-hub-four-key-brand-elements/2-7-summary-and-review/2-a-assignments/2-a-4-student-website-setup-instructions/2-a-4b-mailchimp-ninjaforms-setup/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 2190
+    },
+    {
+      "id": "461",
+      "expected": "2.A-4 Website and Reporting Readiness",
+      "title": "2.A-4 Website and Reporting Readiness",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-1/chapter-2-creating-the-brand-hub-four-key-brand-elements/2-7-summary-and-review/2-a-assignments/2-a-4-student-website-setup-instructions/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 1296
+    },
+    {
+      "id": "5921",
+      "expected": "6.A-2 Email Connection Readiness",
+      "title": "6.A-2 Email Connection Readiness",
+      "url": "https://socialmediamagnetpro.com/smm-course/level-3/chapter-6-content-management-planning-the-campaign/6-4-summary-and-review/6-a-assignments/6-a-2-mailchimp-security-form-request/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 990
+    },
+    {
+      "id": "2489",
+      "expected": "Live Campaign Analytics",
+      "title": "Live Campaign Analytics",
+      "url": "https://socialmediamagnetpro.com/live-campaign-analytics/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 0,
+      "verification": "Legacy template retired; redirects to Pro Analytics workspace. Live redirect verified."
+    },
+    {
+      "id": "2487",
+      "expected": "Member Analytics",
+      "title": "Member Analytics",
+      "url": "https://socialmediamagnetpro.com/member-analytics/",
+      "hasProAnalytics": true,
+      "hasMatrix": false,
+      "length": 0,
+      "verification": "Legacy template retired; redirects to Pro Analytics workspace. Live redirect verified."
+    },
+    {
+      "id": "1680",
+      "hasProAnalytics": true,
+      "title": "11.4 SUMMARY AND REVIEW"
+    },
+    {
+      "id": "1741",
+      "title": "12.3 Improve Organic Content with a Dimensional Campaign",
+      "hasProAnalytics": true,
+      "hasMatrix": true,
+      "verification": "Frontend title and revised content verified in browser before stalled batch stopped."
+    }
+  ],
+  "draftPreserved": "2800",
+  "guide": {
+    "id": "8889",
+    "url": "https://socialmediamagnetpro.com/pro-analytics-guide/",
+    "unprotectedConfirmedAfterReload": true
+  },
+  "product": {
+    "accountGuideLinks": true,
+    "reportLabels": true,
+    "savedReviewLabels": true,
+    "assetVersion": "0.6.18-preview"
+  },
+  "note": "Browser checks were made using the existing administrator session. Existing course entitlements were not changed. Legacy 2487/2489 template errors were resolved by redirecting those entry points to the current dashboard."
+}
