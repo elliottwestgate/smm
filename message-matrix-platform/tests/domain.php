@@ -1,0 +1,50 @@
+<?php
+require __DIR__.'/../plugin/message-matrix-pro/includes/domain.php';
+use WGMM\Domain as D;
+$count=0;
+function check($v,$name){global $count;if(!$v){throw new Exception($name);}++$count;}
+function fails($fn,$name){try{$fn();}catch(InvalidArgumentException $e){check(true,$name);return;}throw new Exception('Expected rejection: '.$name);}
+$d=D::blank();
+$d['brand']['story']='<b>Our story</b>';
+$d['audiences']=[['id'=>'audience_one','name'=>'Local owners']];
+$d['buckets']=[['id'=>'bucket_one','name'=>'Care advice']];
+$d['cells']=[['id'=>'message_one','audience_id'=>'audience_one','bucket_id'=>'bucket_one','message'=>'Useful care advice','role'=>'Retention']];
+$d['channel_plans']=[['id'=>'channel_one','cell_id'=>'message_one','channel'=>'Email']];
+$d['campaigns']=[['id'=>'campaign_one','title'=>'Care campaign','start'=>'2026-10-20','days'=>30,'channels'=>['Email'],'selected_cells'=>['message_one']]];
+$d['events']=[['id'=>'event_one','campaign_id'=>'campaign_one','cell_id'=>'message_one','date'=>'2026-10-20','channel'=>'Email','title'=>'Care guide']];
+$d['assets']=[['id'=>'asset_one','campaign_id'=>'campaign_one','cell_id'=>'message_one','channel'=>'Email','title'=>'Care guide','copy'=>'Clear advice','assigned_user_id'=>7]];
+$d=D::validate($d);check($d['brand']['story']==='Our story','HTML stripped');check(D::validate($d)===$d,'Canonical document stable');
+$bad=$d;$bad['audiences']=[];fails(fn()=>D::validate($bad),'Missing audience reference');
+$bad=$d;$bad['cells'][]=$bad['cells'][0];$bad['cells'][1]['id']='message_two';fails(fn()=>D::validate($bad),'Duplicate Matrix pair');
+$bad=$d;$bad['campaigns'][0]['days']=367;fails(fn()=>D::validate($bad),'Campaign limit');
+$bad=$d;$bad['events'][0]['date']='2026-12-01';fails(fn()=>D::validate($bad),'Out of campaign date');
+fails(fn()=>D::date('2026-02-30'),'Impossible date');fails(fn()=>D::url('javascript:alert(1)'),'Unsafe URL');fails(fn()=>D::text("\xB1"),'Invalid UTF-8');
+$old=$d['assets'];$new=$old;$new[0]['copy']='Updated';D::guard_assets($old,$new,'contributor',7,[7]);check(true,'Assigned contributor edits draft');
+fails(fn()=>D::guard_assets($old,$new,'contributor',8,[7,8]),'Other member asset');
+$new[0]['status']='approved';fails(fn()=>D::guard_assets($old,$new,'owner',1,[7]),'Approval cannot bypass endpoint');
+$old[0]['status']='approved';$new=$old;$new[0]['copy']='Changed';fails(fn()=>D::guard_assets($old,$new,'owner',1,[7]),'Approved content immutable');
+fails(fn()=>D::guard_assets($old,[],'owner',1,[7]),'Approved deletion blocked');
+$new=$d['assets'];$new[0]['assigned_user_id']=999;fails(fn()=>D::guard_assets($d['assets'],$new,'owner',1,[7]),'Non-member assignment');
+$hash=D::foundation_hash($d);$changed=$d;$changed['notes']='Results';check(D::foundation_hash($changed)===$hash,'Results preserve foundation');$changed['brand']['story']='New story';check(D::foundation_hash($changed)!==$hash,'Brand edit invalidates foundation');
+foreach(D::ROLES as $role){check(D::can($role,'read'),'Role read');}
+check(!D::can('viewer','draft')&&!D::can('contributor','approve')&&!D::can('reviewer','plan'),'Restricted roles');check(D::can('reviewer','approve')&&D::can('strategist','plan')&&D::can('owner','team'),'Allowed roles');
+$linked=$d;$linked['assets'][0]['event_id']='event_one';$linked['assets'][]=['id'=>'image_one','campaign_id'=>'campaign_one','cell_id'=>'message_one','channel'=>'Email','type'=>'visual_brief','title'=>'Image Instructions','copy'=>'Use the approved photograph.','companion_asset_id'=>'asset_one'];
+$linked=D::validate($linked);check($linked['assets'][0]['event_id']==='event_one'&&$linked['assets'][1]['companion_asset_id']==='asset_one','Calendar and companion references retained');
+$bad=$linked;$bad['assets'][0]['event_id']='event_missing';fails(fn()=>D::validate($bad),'Missing calendar link rejected');
+$bad=$linked;$bad['assets'][0]['channel']='Blog';fails(fn()=>D::validate($bad),'Calendar channel mismatch rejected');
+$bad=$linked;$bad['assets'][1]['companion_asset_id']='asset_missing';fails(fn()=>D::validate($bad),'Missing content parent rejected');
+$bad=$linked;$bad['assets'][1]['companion_asset_id']='image_one';fails(fn()=>D::validate($bad),'Instructions cannot link to themselves');
+$bad=$linked;$bad['assets'][1]['channel']='Facebook';fails(fn()=>D::validate($bad),'Companion channel mismatch rejected');
+$bad=$linked;array_shift($bad['assets']);fails(fn()=>D::validate($bad),'Removing a linked content draft requires reassignment');
+fails(fn()=>D::guard_assets($d['assets'],[$linked['assets'][0]],'contributor',7,[7]),'Contributor cannot reassign calendar link');
+$legacy=$d['assets'];unset($legacy[0]['event_id'],$legacy[0]['companion_asset_id']);$legacy[0]['status']='approved';$canonical=$d['assets'];$canonical[0]['status']='approved';D::guard_assets($legacy,$canonical,'owner',7,[7]);check(true,'Legacy approved assets normalize without false edit');
+$ready=$linked;$ready['campaigns'][0]['foundation_version']='foundation_one';$ready['assets'][0]['role']=$ready['events'][0]['role'];$ready['assets'][1]['role']=$ready['events'][0]['role'];
+check(!D::approval_issues($ready,$ready['assets'][0],'foundation_one'),'Linked content ready for approval');
+check(!D::approval_issues($ready,$ready['assets'][1],'foundation_one'),'Linked instructions ready for approval');
+check(count(D::approval_issues($ready,$ready['assets'][0],''))===1,'Unapproved foundation blocks approval');
+$bad=$ready;$bad['assets'][0]['event_id']='';check(count(D::approval_issues($bad,$bad['assets'][0],'foundation_one'))===1,'Calendar required for approval');
+$bad=$ready;$bad['assets'][1]['companion_asset_id']='';check(count(D::approval_issues($bad,$bad['assets'][1],'foundation_one'))===2,'Unlinked instructions cannot be approved');
+$bad=$ready;$bad['assets'][0]['copy']='  ';check(count(D::approval_issues($bad,$bad['assets'][0],'foundation_one'))===1,'Whitespace is not content');
+$bad=$ready;$bad['assets'][0]['role']='Retention';check(count(D::approval_issues($bad,$bad['assets'][0],'foundation_one'))===1,'Calendar purpose mismatch blocks approval');
+$bad=$ready;$bad['campaigns'][0]['foundation_version']='older_version';check(count(D::approval_issues($bad,$bad['assets'][0],'foundation_one'))===1,'Outdated campaign foundation blocks approval');
+echo "$count domain checks passed\n";
