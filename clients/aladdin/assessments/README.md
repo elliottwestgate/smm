@@ -4,16 +4,18 @@ These reports are evolving advisory snapshots used to steer Aladdin marketing an
 
 Before recommending or making marketing changes, read this index and the latest available assessment of each type alongside the approved foundation documents. Use findings to identify priorities and questions, validate them against current evidence, and obtain any implementation approval required by the user.
 
-## Current archive status
+## Latest reviewed snapshots
 
-No PDFs have been archived here yet. The two reports offered for intake on October 25, 2026 are listed below, but their referenced local files were unavailable. Do not treat this inventory as proof that their contents have been reviewed.
+Both original PDFs were read and archived unchanged on October 25, 2026. The dated folder is the intake date, not the measured period. These are the first archived snapshots of their respective types; no preceding same-type PDF is archived here for trend comparison.
 
-| User-supplied filename | Date indicated by filename | Status |
-| --- | --- | --- |
-| Aladdin-Cleaning-Restoration-Strategy-Report-Insights-and-Actions-10-19-2026.pdf | 2026-10-19 | Awaiting accessible PDF; title, report date and measured period not yet verified from contents |
-| Aladdin-Management-Organization-Report-and-Organization-Results-7-28-2026.pdf | 2026-07-28 | Awaiting accessible PDF; title, report date and measured period not yet verified from contents |
+| Report | Document date | Measured period | Latest reviewed file |
+| --- | --- | --- | --- |
+| Pro Analytics Review - Aladdin Cleaning & Restoration | 2026-10-19, 3:29 PM Central; printed 3:34 PM | 2026-07-21 through 2026-10-18; comparison 2026-04-22 through 2026-07-20 | [Original PDF](2026-10-25/Aladdin-Cleaning-Restoration-Strategy-Report-Insights-and-Actions-10-19-2026.pdf) |
+| Brand Dyno - Report and Results / Organization Report and Organization Results | Generated and published/updated 2026-07-25; original filename says 7-28-2026 | Summer 2026 Assessment Cycle, 2026-06-18 through 2026-07-17; 16 assessments | [Original PDF](2026-10-25/Aladdin-Management-Organization-Report-and-Organization-Results-7-28-2026.pdf) |
 
-Preserve these document titles and original filenames. The user identifies the Management/Organization report as the Brand Dyno assessment. Do not relabel the other report as a Pro Analytics Review without supporting document contents. A report whose filename includes "Strategy" remains advisory in this archive unless the user explicitly approves it as a replacement foundational source.
+Read the [intake review and forward guidance](2026-10-25/README.md) and [metadata/checksums](2026-10-25/metadata.json) alongside these PDFs.
+
+Original filenames and document titles are preserved. The PDF named "Strategy-Report-Insights-and-Actions-10-19-2026" identifies itself on page 1 as a **Pro Analytics Review**, not a replacement Strategy Canvas. The July Brand Dyno remains historical organizational context, not a current October health measurement. Neither report supersedes the approved foundation documents.
 
 ## Storage and versioning
 

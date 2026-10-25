@@ -1,0 +1,41 @@
+{
+  "intake_date": "2026-10-25",
+  "role": "dated advisory assessments; not sources of truth",
+  "reports": [
+    {
+      "filename": "Aladdin-Cleaning-Restoration-Strategy-Report-Insights-and-Actions-10-19-2026.pdf",
+      "document_title": "Pro Analytics Review - Aladdin Cleaning & Restoration",
+      "source": "Social Media Magnet Pro / Pro Analytics",
+      "reviewed_pages": 11,
+      "review_method": "visual review of all pages",
+      "report_timestamp": "2026-10-19 15:29 Central Time",
+      "print_timestamp": "2026-10-19 15:34 Central Time",
+      "period_start": "2026-07-21",
+      "period_end": "2026-10-18",
+      "comparison_start": "2026-04-22",
+      "comparison_end": "2026-07-20",
+      "bytes": 2312315,
+      "sha256": "fe75f30cd7505de377e601d96d720b79ee80f7716965e802e8dca586cdbda42c",
+      "git_blob_sha": "992bfc5c8caa9055f4860cbd3300aa0fba817e58"
+    },
+    {
+      "filename": "Aladdin-Management-Organization-Report-and-Organization-Results-7-28-2026.pdf",
+      "document_title": "Report and Results - Organization Report and Organization Results",
+      "source": "Westgate Marketing Brand Dyno",
+      "reviewed_pages": 6,
+      "review_method": "full text review with visual cover and results checks",
+      "assessment_cycle": "Summer 2026 Assessment Cycle",
+      "model": "service",
+      "assessments": 16,
+      "generated_date": "2026-07-25",
+      "published_updated_date": "2026-07-25",
+      "filename_date": "2026-07-28",
+      "period_start": "2026-06-18",
+      "period_end": "2026-07-17",
+      "comparison_period": null,
+      "bytes": 297578,
+      "sha256": "b8a8e5cc4e6128f69ecf7f28115a41988c1c151ab8e6647a291c939efa5e3fdf",
+      "git_blob_sha": "c6891ac73ec5f446d9a62405b201fa560f61004a"
+    }
+  ]
+}
