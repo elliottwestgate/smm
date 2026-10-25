@@ -32,3 +32,7 @@ This section contains the strategy sources, editable campaign calendar, first tw
 - Confirm final links, service availability, contact details, and scheduled dates before publication.
 - Read `strategy/README.md` and the October 8 approved Strategy Canvas before drafting or revising future content.
 
+
+## Dated advisory assessments
+
+Before recommending or making Aladdin marketing changes, consult [assessments/README.md](assessments/README.md) and the latest available reviewed snapshots alongside the approved foundational sources. Preserve dated report history and distinguish report generation dates from measured periods. These evolving reports steer priorities but are not sources of truth and do not authorize implementation by themselves.
