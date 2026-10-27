@@ -36,3 +36,7 @@ This section contains the strategy sources, editable campaign calendar, first tw
 ## Dated advisory assessments
 
 Before recommending or making Aladdin marketing changes, consult [assessments/README.md](assessments/README.md) and the latest available reviewed snapshots alongside the approved foundational sources. Preserve dated report history and distinguish report generation dates from measured periods. These evolving reports steer priorities but are not sources of truth and do not authorize implementation by themselves.
+
+## Approved production checklist
+
+Before creating or scheduling a new blog, email, Facebook post, or Instagram post, use the [Aladdin Content Production Checklist](CONTENT_PRODUCTION_CHECKLIST.md). It includes the approved three-section email format, 18 pt typography, connected campaign paths, paired social posts, and image-to-copy checks in the actual scheduled previews.
