@@ -1,3 +1,12 @@
+REPORT DELIVERY - 0.6.27-preview
+
+Adds Account > Report Delivery; manual analytics PDF and saved Pro Analytics Review
+emailing, plus independent weekly, calendar-month and every-four-week analytics
+schedules. No public sharing URL or public PDF file is created. Existing provider
+connections, billing, team membership, reporting and saved Reviews are retained.
+
+Release/testing details: see pro-platform/docs/report-delivery-0.6.27.md in source.
+
 Westgate Practicum Pro 0.6.6-preview
 
 PRIVATE PILOT UPDATE

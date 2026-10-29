@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SMM Pro Analytics
  * Description: Company analytics dashboard and queued performance reviews within WordPress. Native Google Analytics, Constant Contact reporting and Facebook Page pilot.
- * Version: 0.6.26-preview
+ * Version: 0.6.27-preview
  * Author: Westgate Marketing
  * Requires PHP: 8.0
  * License: GPL-2.0-or-later
@@ -15,6 +15,8 @@ require_once __DIR__ . '/company.php';
 require_once __DIR__ . '/admin.php';
 require_once __DIR__ . '/portal.php';
 require_once __DIR__ . '/account.php';
+require_once __DIR__ . '/delivery-pdf.php';
+require_once __DIR__ . '/report-delivery.php';
 require_once __DIR__ . '/reviews.php';
 require_once __DIR__ . '/native-reviews.php';
 require_once __DIR__ . '/google.php';
@@ -24,6 +26,8 @@ require_once __DIR__ . '/constant-contact.php';
 require_once __DIR__ . '/cc-reports.php';
 require_once __DIR__ . '/facebook.php';
 require_once __DIR__ . '/facebook-reports.php';
+
+register_activation_hook(__FILE__, ['WGPP_Report_Delivery','activate']);
 
 final class Westgate_Practicum_Pro {
     public static function boot() {
@@ -35,6 +39,7 @@ final class Westgate_Practicum_Pro {
         WGPP_Google::boot();
         WGPP_GA4::boot();
         WGPP_Account::boot();
+        WGPP_Report_Delivery::boot();
         WGPP_Constant_Contact::boot();
         WGPP_CC_Reports::boot();
         WGPP_Facebook::boot();
