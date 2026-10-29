@@ -1,3 +1,10 @@
+DELIVERY QUEUE PROGRESS FIX - 0.6.28-preview
+
+Adds authenticated dashboard queue advancement when WP-Cron is delayed, live delivery
+history, a Check delivery now button, preparation stage and last-activity feedback.
+Existing queued emails and saved schedules are retained. No need to resubmit a send.
+Unattended automatic schedules still require a functioning WordPress/host scheduler.
+
 REPORT DELIVERY - 0.6.27-preview
 
 Adds Account > Report Delivery; manual analytics PDF and saved Pro Analytics Review

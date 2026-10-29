@@ -5,16 +5,39 @@ if (!defined('ABSPATH')) { exit; }
 final class WGPP_Report_Delivery {
     const META = '_wgpp_report_delivery_v1';
     const HOOK = 'wgpp_report_delivery';
-    const VERSION = '0.6.27-preview';
+    const VERSION = '0.6.28-preview';
+    private static $progressNote='Preparing reporting data. No email sent.';
     public static function boot() {
         add_action('admin_post_wgpp_report_delivery', [__CLASS__, 'handle']);
         add_action(self::HOOK, [__CLASS__, 'run'], 10, 1);
+        add_action('wp_ajax_wgpp_delivery_progress',[__CLASS__,'ajax']);
     }
     public static function activate() {
         $page=1;
         do{$ids=get_posts(['post_type'=>WGPP_Company::TYPE,'post_status'=>'private','meta_key'=>self::META,'fields'=>'ids','posts_per_page'=>100,'paged'=>$page++,'orderby'=>'ID','order'=>'ASC']);
             foreach($ids as $company){try{self::wake((int)$company,time()+60);}catch(Throwable $e){}}
         }while(count($ids)===100);
+    }
+    /** An authenticated dashboard can advance already-confirmed work if WP-Cron is late. */
+    public static function ajax() {
+        check_ajax_referer('wgpp_delivery_progress','nonce');nocache_headers();
+        try{
+            $c=WGPP_Company::context();if(!$c){throw new RuntimeException('Company access required.');}
+            self::access($c['id'],get_current_user_id());
+            if(($_SERVER['REQUEST_METHOD'] ?? '')!=='POST'){throw new RuntimeException('Use a protected POST request.');}
+            if(($_POST['advance'] ?? '')==='1'){self::run($c['id']);}
+            wp_send_json_success(['jobs'=>self::public_jobs($c['id'])]);
+        }catch(RuntimeException $e){wp_send_json_error(['message'=>$e->getMessage()],403);}
+    }
+    public static function public_jobs($company) {
+        $out=[];foreach(array_reverse(self::state($company)['jobs']) as $j){
+            $out[]=['id'=>$j['id'],'status'=>$j['status'],'created'=>self::stamp($j['created']),
+                'updated'=>self::stamp($j['updated']),'attempts'=>(int)$j['attempts'],
+                'type'=>$j['review']?'Pro Analytics Review':'Analytics Report',
+                'period'=>implode(' to ',array_map(static function($d){return WGPP_Analytics::date($d)->format('m/d/Y');},$j['ranges']['current'])),
+                'message'=>$j['message'] ?? 'Waiting for the delivery worker. No email sent.',
+                'recipients'=>$j['recipients']];
+        }return $out;
     }
     public static function state($company) {
         $v = get_post_meta($company, self::META, true);
@@ -182,7 +205,7 @@ final class WGPP_Report_Delivery {
             $c=self::access($company,$job['principal'],isset($job['schedule']));
             wp_set_current_user($job['principal']);$_POST['workspace']=(string)$company;$_GET['workspace']=(string)$company;
             $document=isset($job['pdf'])?WGPP_Google::decrypt($job['pdf'],'delivery:'.$company.':'.$job['id']):null;
-            if(!$document){$payload=self::collect($company,$job);if($payload===null){self::finish($company,$job,'queued','Preparing reporting data. No email sent.',true);return;}
+            if(!$document){$payload=self::collect($company,$job);if($payload===null){self::finish($company,$job,'queued',self::$progressNote,true);return;}
                 $document=['bytes'=>base64_encode(WGPP_Delivery_PDF::build($c['name'],$payload,$company)),'title'=>$job['review']?'Pro Analytics Review':'Pro Analytics Report'];
                 $job['pdf']=WGPP_Google::encrypt($document,'delivery:'.$company.':'.$job['id']);
             }
@@ -235,15 +258,15 @@ final class WGPP_Report_Delivery {
     public static function collect($company,$job) {
         if($job['review']){$saved=self::saved_review($company,$job['review']);return ['snapshot'=>$saved['snapshot'],'review'=>$saved['review'],'created'=>$saved['created_at']];}
         self::past_dates($job['ranges'],$company);$a=WGPP_Analytics::lookup(...$job['ranges']['current']);$b=$job['ranges']['comparison']?WGPP_Analytics::lookup(...$job['ranges']['comparison']):null;
-        if(!$a || ($job['ranges']['comparison'] && !$b)){WGPP_GA4::progress($company,array_values(array_filter($job['ranges'])));return null;}
+        if(!$a || ($job['ranges']['comparison'] && !$b)){WGPP_GA4::progress($company,array_values(array_filter($job['ranges'])));self::$progressNote='Preparing website analytics for the selected periods. No email sent.';return null;}
         if($b && ($a['property']!==$b['property'] || $a['timezone']!==$b['timezone'])){throw new RuntimeException('Comparison identity differs.');}
         $channels=[];$waiting=false;
-        foreach(['facebook'=>'WGPP_FB_Reports','instagram'=>'WGPP_IG_Reports'] as $key=>$class){try{$channels[$key]=$class::request($company,$job['ranges']);}catch(Throwable $e){$channels[$key]=['status'=>'unavailable'];}$waiting=$waiting || in_array($channels[$key]['status'] ?? '',['queued','processing'],true);}
+        foreach(['facebook'=>'WGPP_FB_Reports','instagram'=>'WGPP_IG_Reports'] as $key=>$class){try{$channels[$key]=$class::request($company,$job['ranges']);}catch(Throwable $e){$channels[$key]=['status'=>'unavailable'];}$waiting=$waiting || in_array($channels[$key]['status'] ?? '',['queued','processing'],true);if($waiting){self::$progressNote='Preparing '.ucfirst($key).' reporting. No email sent.';return null;}}
         $email=WGPP_CC_Reports::progress($company);
         $waiting=$waiting || in_array($email['status'] ?? '',['queued','processing'],true);
         $channels['email']=['status'=>$email['status'] ?? 'unavailable'];
         if(($email['status'] ?? '')==='complete'){$channels['email']['basis']='Campaigns sent during each period; cumulative responses through collection, not period-only responses.';foreach($job['ranges'] as $side=>$range){$channels['email'][$side]=$range?WGPP_CC_Reports::summarize($email['rows'],...array_merge($range,[$a['timezone']])):null;}}
-        if($waiting){return null;}
+        if($waiting){self::$progressNote='Preparing email campaign reporting. No email sent.';return null;}
         return ['snapshot'=>['ranges'=>$job['ranges'],'current'=>$a,'comparison'=>$b,'analysis'=>WGPP_Analytics::analyse($a,$b),'context'=>['channels'=>$channels]],'created'=>gmdate('c')];
     }
     private static function form($company,$op) {
@@ -279,8 +302,10 @@ final class WGPP_Report_Delivery {
         echo '<h4>Delivery history</h4><p>“Accepted” means the mail service accepted the email, not proof of inbox delivery. Failed or interrupted sends are never automatically resent. Review the recipient results before sending again.</p>';
         $pending=array_filter($s['jobs'],static function($j){return in_array($j['status'],['queued','processing','sending'],true);});if($pending && !wp_next_scheduled(self::HOOK,[(int)$c['id']])){echo '<p role="alert">Delivery is waiting, but its WordPress wake-up is missing. Save a schedule again and ask your administrator to check WP-Cron.</p>';}
         echo '<p class="wgpa-small-note">Delivery runs through the website’s WordPress scheduler. A low-traffic site may run later than the selected time.</p>';
-        foreach(array_reverse($s['jobs']) as $j){echo '<details><summary>'.esc_html(ucfirst($j['status']).' · '.self::stamp($j['created']).' · '.($j['review']?'Pro Analytics Review':'Analytics Report')).'</summary><p>'.esc_html(implode(' to ',$j['ranges']['current'])).'</p><p>'.esc_html($j['message'] ?? 'Preparing report…').'</p>';foreach($j['recipients'] as $email=>$status){echo '<p>'.esc_html($email).' · '.esc_html($status).'</p>';}echo '</details>';}
-        if(!$s['jobs']){echo '<p>No report emails yet.</p>';}
+        $settings=['url'=>admin_url('admin-ajax.php'),'nonce'=>wp_create_nonce('wgpp_delivery_progress'),'workspace'=>$c['id']];
+        echo '<div data-delivery-live data-delivery-config="'.esc_attr(wp_json_encode($settings)).'" data-pending="'.($pending?'1':'0').'"><p class="wgpa-operation-status" data-tone="loading" data-delivery-progress role="status" aria-live="polite">'.($pending?'Your report is queued. This open page will check and advance preparation automatically.':'No pending deliveries.').'</p><button type="button" data-delivery-check>Check delivery now</button><div data-delivery-history>';
+        foreach(self::public_jobs($c['id']) as $j){echo '<details><summary>'.esc_html(ucfirst($j['status']).' · '.$j['created'].' · '.$j['type']).'</summary><p>'.esc_html($j['period']).'</p><p>'.esc_html($j['message']).'</p><p>Last activity: '.esc_html($j['updated']).' · Preparation attempts: '.(int)$j['attempts'].'</p>';foreach($j['recipients'] as $email=>$status){echo '<p>'.esc_html($email).' · '.esc_html($status).'</p>';}echo '</details>';}
+        if(!$s['jobs']){echo '<p>No report emails yet.</p>';}echo '</div></div>';
         return ob_get_clean();
     }
 }

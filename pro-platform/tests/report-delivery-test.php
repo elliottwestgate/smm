@@ -101,3 +101,14 @@ $ranges=WGPP_Report_Delivery::period($s,$s['next']);$rows=[];foreach($ranges as 
 $meta[10][WGPP_Analytics::META]=WGPP_Analytics::validate(['schema'=>'wgpp-snapshots-v1','snapshots'=>$rows]);$meta[10][WGPP_Report_Delivery::META]=['schedules'=>['weekly'=>$s],'jobs'=>[]];
 WGPP_Report_Delivery::run(10);$state=WGPP_Report_Delivery::state(10);$sent=end($state['jobs']);check($sent['status']==='accepted'&&$sent['ranges']===$ranges,'Due production schedule builds and sends exact-range analytics');
 $n=count($mail);WGPP_Report_Delivery::run(10);check(count($mail)===$n&&$state['schedules']['weekly']['next']>time(),'Repeated cron pass cannot duplicate a scheduled period');
+class DeliveryJSON extends Exception {public $data,$status;function __construct($d,$s){$this->data=$d;$this->status=$s;}}
+function check_ajax_referer($action,$field){if(empty($GLOBALS['nonceOK'])){throw new RuntimeException('nonce');}}
+function nocache_headers(){}function wp_send_json_success($d){throw new DeliveryJSON($d,200);}function wp_send_json_error($d,$s){throw new DeliveryJSON($d,$s);}
+$uid=1;$_SERVER['REQUEST_METHOD']='POST';$_GET=[];$_POST=['workspace'=>'10','advance'=>'1'];$GLOBALS['nonceOK']=true;
+$job['id']='ajax-queued';$job['principal']=1;$job['review']='review-one';$job['status']='queued';$job['created']=$job['updated']=time();$job['recipients']=['ajax@example.com'=>'queued'];
+$meta[10][WGPP_Report_Delivery::META]=['schedules'=>[],'jobs'=>['ajax-queued'=>$job]];$n=count($mail);
+try{WGPP_Report_Delivery::ajax();}catch(DeliveryJSON $r){check($r->status===200&&$r->data['jobs'][0]['status']==='accepted'&&count($mail)===$n+1,'Authenticated dashboard advances a previously queued send without cron');check(!isset($r->data['jobs'][0]['pdf'])&&$r->data['jobs'][0]['period']==='10/01/2026 to 10/28/2026','Progress response contains formatted dates and no encrypted report payload');}
+try{WGPP_Report_Delivery::ajax();}catch(DeliveryJSON $r){check(count($mail)===$n+1,'Repeated progress polls cannot duplicate the email');}
+$uid=3;try{WGPP_Report_Delivery::ajax();}catch(DeliveryJSON $r){check($r->status===403,'Viewer cannot advance or inspect delivery queue');}
+$uid=1;$_POST['workspace']='20';try{WGPP_Report_Delivery::ajax();}catch(DeliveryJSON $r){check($r->status===403,'Progress cannot cross company boundary');}
+$_POST['workspace']='10';$_SERVER['REQUEST_METHOD']='GET';try{WGPP_Report_Delivery::ajax();}catch(DeliveryJSON $r){check($r->status===403,'Progress mutation rejects GET requests');}
