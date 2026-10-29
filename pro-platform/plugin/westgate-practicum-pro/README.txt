@@ -1,3 +1,14 @@
+TRANSPARENT LOGOS AND DELIVERY CONTROLS - 0.6.34-preview
+
+Company logos retain alpha transparency in the header and Brand Axis hub.
+Opaque edge-connected white backgrounds are removed during PDF rendering,
+without changing stored uploads. A directional arrow replaces the orange square.
+Delivery history retains five finished records plus all pending work. Owners
+can delete finished records, cancel pending deliveries and cancel recurring
+schedules (then create a new schedule to reschedule). Already sending/accepted
+emails cannot be recalled. Short-lived request hashes preserve duplicate and
+rate-limit protections after history is removed.
+
 COMPANY LOGO IN BRAND HUB - 0.6.33-preview
 
 The emailed Analytics Report displays the company logo inside the Brand Axis

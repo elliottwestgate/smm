@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) { exit; }
 final class WGPP_Report_Delivery {
     const META = '_wgpp_report_delivery_v1';
     const HOOK = 'wgpp_report_delivery';
-    const VERSION = '0.6.33-preview';
+    const VERSION = '0.6.34-preview';
     private static $progressNote='Preparing reporting data. No email sent.';
     public static function boot() {
         add_action('admin_post_wgpp_report_delivery', [__CLASS__, 'handle']);
@@ -41,10 +41,10 @@ final class WGPP_Report_Delivery {
     }
     public static function state($company) {
         $v = get_post_meta($company, self::META, true);
-        return is_array($v) ? array_merge(['schedules'=>[], 'jobs'=>[]], $v) : ['schedules'=>[], 'jobs'=>[]];
+        return self::prune(is_array($v) ? array_merge(['schedules'=>[], 'jobs'=>[]], $v) : ['schedules'=>[], 'jobs'=>[]]);
     }
     private static function write($company, $state) {
-        if (self::state($company) !== $state && !update_post_meta($company, self::META, $state)) {
+        if (get_post_meta($company,self::META,true) !== $state && !update_post_meta($company, self::META, $state)) {
             throw new RuntimeException('Could not save Report Delivery. Please try again.');
         }
     }
@@ -108,10 +108,18 @@ final class WGPP_Report_Delivery {
         return ['id'=>wp_generate_uuid4(),'principal'=>$user,'origin'=>home_url('/'),'created'=>time(),'updated'=>time(),'status'=>'queued','attempts'=>0,'ranges'=>$ranges,'review'=>$review,'note'=>$note,'recipients'=>array_fill_keys($recipients,'queued')];
     }
     private static function prune($state) {
-        // Keep pending jobs and the last 50 terminal records. PDFs never persist after delivery.
-        $terminal=[];foreach($state['jobs'] as $id=>$j){if(!in_array($j['status'],['queued','processing','sending'],true)){$terminal[]=$id;}}
-        foreach(array_slice($terminal,0,max(0,count($terminal)-50)) as $id){unset($state['jobs'][$id]);}
-        return $state;
+        // Display/store five terminal deliveries; keep pending work and compact 24-hour
+        // request hashes separately so deleting history cannot resend or bypass rate limits.
+        $receipts=$state['requests'] ?? [];foreach($state['jobs'] as $j){if(!empty($j['request_id'])){$receipts[hash('sha256',$j['request_id'])]=$j['created'];}}
+        $state['requests']=array_filter($receipts,static function($at){return $at>time()-86400;});
+        $terminal=array_filter($state['jobs'],static function($j){return !in_array($j['status'],['queued','processing','sending'],true);});
+        uasort($terminal,static function($a,$b){return (($b['updated'] ?? $b['created'])<=>($a['updated'] ?? $a['created'])) ?: ($b['created']<=>$a['created']);});
+        foreach(array_slice(array_keys($terminal),5) as $id){unset($state['jobs'][$id]);}return $state;
+    }
+    private static function cancel_job(&$job){
+        if(!in_array($job['status'],['queued','processing'],true)){throw new RuntimeException('This delivery has already started sending or finished and cannot be canceled.');}
+        $job['status']='cancelled';$job['updated']=time();$job['message']='Canceled. No further recipients will be emailed. Previously accepted emails cannot be recalled.';
+        foreach($job['recipients'] as &$recipient){if($recipient==='queued'){$recipient='not_sent';}}unset($recipient,$job['lease'],$job['pdf'],$job['preparation']);
     }
     public static function handle() {
         check_admin_referer('wgpp_report_delivery');$c=WGPP_Company::context();
@@ -119,9 +127,9 @@ final class WGPP_Report_Delivery {
             if (!$c) { throw new RuntimeException('Company access required.'); }
             $op=$_POST['delivery_op'] ?? '';$user=get_current_user_id();
             self::access($c['id'],$user,$op!=='send');
-            if (!is_string($op) || !in_array($op,['save','pause','send'],true)) { throw new InvalidArgumentException('Invalid delivery action.'); }
+            if (!is_string($op) || !in_array($op,['save','pause','send','delete','cancel','cancel_schedule'],true)) { throw new InvalidArgumentException('Invalid delivery action.'); }
             $schedule=$emails=$ranges=$review=null;
-            $input=[];foreach(['frequency','first_send','send_time','comparison','recipients','start','end','review_id','note','request_id'] as $key) {
+            $input=[];foreach(['frequency','first_send','send_time','comparison','recipients','start','end','review_id','note','request_id','job_id'] as $key) {
                 $v=$_POST[$key] ?? '';if(!is_string($v)){throw new InvalidArgumentException('Invalid delivery selection.');}$input[$key]=wp_unslash($v);
             }
             if ($op==='save' && ($_POST['confirm_recipients'] ?? '')!=='1') { throw new InvalidArgumentException('Confirm that these recipients may receive this company report.'); }
@@ -136,21 +144,33 @@ final class WGPP_Report_Delivery {
                 else{$ranges=WGPP_Analytics::ranges('custom',$input['end'],$input['start'],$input['comparison']);}
                 self::past_dates($ranges,$c['id']);
             }
-            self::wake($c['id'],time()+5);
+            if(!in_array($op,['delete','cancel','cancel_schedule'],true)){self::wake($c['id'],time()+5);}
             WGPP_Native_Reviews::locked($c['id'],static function()use($c,$user,$op,$input,$schedule,$emails,$ranges,$review){
                 self::access($c['id'],$user,$op!=='send');$state=self::state($c['id']);
-                if($op==='save'){$state['schedules'][$schedule['frequency']]=$schedule;}
+                if($op==='delete'){
+                    $id=$input['job_id'];if(!preg_match('/^[a-zA-Z0-9-]{1,100}$/D',$id)||!isset($state['jobs'][$id])){throw new InvalidArgumentException('Delivery record is no longer available.');}
+                    if(in_array($state['jobs'][$id]['status'],['queued','processing','sending'],true)){throw new RuntimeException('A pending delivery cannot be deleted.');}
+                    unset($state['jobs'][$id]);
+                }elseif($op==='cancel'){
+                    $id=$input['job_id'];if(!isset($state['jobs'][$id])){throw new InvalidArgumentException('Delivery is no longer available.');}
+                    self::cancel_job($state['jobs'][$id]);
+                }elseif($op==='cancel_schedule'){
+                    $frequency=$input['frequency'];if(!isset($state['schedules'][$frequency])){throw new InvalidArgumentException('Schedule is no longer available.');}
+                    unset($state['schedules'][$frequency]);
+                    foreach($state['jobs'] as &$scheduled){if(($scheduled['schedule'] ?? '')===$frequency && in_array($scheduled['status'],['queued','processing'],true)){self::cancel_job($scheduled);}}unset($scheduled);
+                }elseif($op==='save'){$state['schedules'][$schedule['frequency']]=$schedule;}
                 elseif($op==='pause'){if(!isset($state['schedules'][$input['frequency']])){throw new InvalidArgumentException('Schedule unavailable.');}$state['schedules'][$input['frequency']]['enabled']=false;}
                 else {
+                    if(isset($state['requests'][hash('sha256',$input['request_id'])])){return;}
                     foreach($state['jobs'] as $j){if(($j['request_id'] ?? '')===$input['request_id']){return;}}
                     $pending=array_filter($state['jobs'],static function($j){return in_array($j['status'],['queued','processing','sending'],true);});
                     if(count($pending)>=10){throw new RuntimeException('Ten deliveries are already pending. Wait for them to finish.');}
-                    $recent=array_filter($state['jobs'],static function($j){return $j['created']>time()-3600;});if(count($recent)>=20){throw new RuntimeException('The company hourly send limit has been reached. Try again later.');}
+                    $recent=array_filter($state['requests'] ?? [],static function($at){return $at>time()-3600;});if(count($recent)>=20){throw new RuntimeException('The company hourly send limit has been reached. Try again later.');}
                     $job=self::new_job($c['id'],$user,$ranges,$emails,$review,sanitize_textarea_field($input['note']));$job['request_id']=$input['request_id'];$state['jobs'][$job['id']]=$job;
                 }
                 self::write($c['id'],self::prune($state));
             });
-            $message=$op==='save'?'Delivery schedule saved.':($op==='pause'?'Schedule paused. Pending deliveries remain listed below.':'Report queued. It will be emailed after preparation is complete. Check Delivery history for the result.');
+            $message=$op==='cancel'?'Delivery canceled. Any email already accepted cannot be recalled.':($op==='cancel_schedule'?'Schedule canceled, including its deliveries still being prepared. Emails already sending or accepted cannot be recalled.':($op==='delete'?'Delivery record deleted. No emails or schedules were changed.':($op==='save'?'Delivery schedule saved.':($op==='pause'?'Schedule paused. Pending deliveries remain listed below.':'Report queued. It will be emailed after preparation is complete. Check Delivery history for the result.'))));
         } catch (InvalidArgumentException|RuntimeException $e) { $message=$e->getMessage(); }
         set_transient('wgpp_notice_'.get_current_user_id(),$message,120);
         wp_safe_redirect(add_query_arg('workspace',$c['id'] ?? 0,WGPP_Team::portal()).'#account-delivery');exit;
@@ -299,6 +319,7 @@ final class WGPP_Report_Delivery {
     public static function render($c) {
         if(!in_array($c['role'],['owner','analyst'],true)){return '<h4>Report Delivery</h4><p>Your Owner or an Analyst can email company reports.</p>';}
         wp_enqueue_script('wgpp-delivery',plugins_url('assets/report-delivery.js',__FILE__),['wgpp-portal'],self::VERSION,true);
+        $stored=get_post_meta($c['id'],self::META,true);if(is_array($stored)&&count($stored['jobs'] ?? [])>5){WGPP_Native_Reviews::locked($c['id'],static function()use($c){self::write($c['id'],self::state($c['id']));});}
         $s=self::state($c['id']);$today=self::central(time());$last=$today->modify('-1 day');ob_start();
         echo '<h4>Report Delivery</h4><p>Send a private PDF attachment to up to ten email addresses. Recipients do not need an account. No public report page is created. PDFs contain selectable text and compact reporting sections.</p>';
         if(wp_get_environment_type()!=='production'){echo '<p role="status"><strong>Staging:</strong> automatic schedules do not send here. You can explicitly send a report below to test delivery.</p>';}
@@ -311,7 +332,7 @@ final class WGPP_Report_Delivery {
                 $first=$today->modify('+1 day');if($key==='monthly'){$first=$today->modify('first day of next month');}elseif($key==='weekly'){$first=$today->modify('next monday');}
                 echo '<p><label>First / next delivery date <input type="date" name="first_send" value="'.$first->format('Y-m-d').'" required></label> <label>Time (Central Time) <input type="time" name="send_time" value="'.esc_attr($plan['time'] ?? '08:00').'" required></label></p>';self::compare($plan['comparison'] ?? 'prior');
                 echo '<p><label><input type="checkbox" name="confirm_recipients" value="1" required> These recipients may receive this company’s analytics reports.</label></p><button>Save '.$title.' schedule</button></form>';
-                if($plan && $plan['enabled']){self::form($c['id'],'pause');echo '<input type="hidden" name="frequency" value="'.$key.'"><button>Pause '.$title.'</button></form>';}
+                if($plan){self::form($c['id'],'cancel_schedule');echo '<input type="hidden" name="frequency" value="'.$key.'"><button>Cancel '.$title.' schedule</button></form>';}
                 echo '</details>';
             }
         }else{echo '<p>Your Owner manages recurring schedules.</p>';}
@@ -319,12 +340,12 @@ final class WGPP_Report_Delivery {
         $reviews=get_post_meta($c['id'],WGPP_Native_Reviews::META,true);$reviews=is_array($reviews)?$reviews:[];uasort($reviews,static function($a,$b){return strcmp($b['created_at'],$a['created_at']);});
         foreach(array_slice($reviews,0,100,true) as $id=>$j){if($j['status']==='completed' && empty($j['trashed_at'])){echo '<option value="'.esc_attr($id).'">Saved Pro Analytics Review · '.esc_html(self::stamp(strtotime($j['created_at']))).' · '.esc_html(implode(' to ',$j['snapshot']['ranges']['current'])).'</option>';}}
         echo '</select></label></p><p>Saved Reviews keep their original dates and content; emailing them does not create or use another Review.</p><div data-delivery-dates><p><label>Start <input name="start" type="date" value="'.$last->modify('-29 days')->format('Y-m-d').'" required></label> <label>End <input name="end" type="date" value="'.$last->format('Y-m-d').'" required></label></p>';self::compare();echo '</div><p><label>Recipients <input type="text" name="recipients" maxlength="2500" required placeholder="name@company.com"></label></p><p><label>Optional message <textarea name="note" maxlength="2000" rows="3"></textarea></label></p><p><label><input type="checkbox" name="confirm_recipients" value="1" required> These recipients may receive this company report.</label></p><button>Prepare and email report</button></div></form>';
-        echo '<h4>Delivery history</h4><p>“Accepted” means the mail service accepted the email, not proof of inbox delivery. Failed or interrupted sends are never automatically resent. Review the recipient results before sending again.</p>';
+        echo '<h4>Delivery history</h4><p>Only the five most recent finished deliveries are kept. Pending deliveries remain visible. Owners can cancel a queued/preparing delivery or delete a finished record. Emails already sending or accepted cannot be recalled. Cancel a recurring schedule above, then create a new one to reschedule.</p><p>“Accepted” means the mail service accepted the email, not proof of inbox delivery. Failed or interrupted sends are never automatically resent. Review the recipient results before sending again.</p>';
         $pending=array_filter($s['jobs'],static function($j){return in_array($j['status'],['queued','processing','sending'],true);});if($pending && !wp_next_scheduled(self::HOOK,[(int)$c['id']])){echo '<p role="alert">Delivery is waiting, but its WordPress wake-up is missing. Save a schedule again and ask your administrator to check WP-Cron.</p>';}
         echo '<p class="wgpa-small-note">Delivery runs through the website’s WordPress scheduler. A low-traffic site may run later than the selected time.</p>';
-        $settings=['url'=>admin_url('admin-ajax.php'),'nonce'=>wp_create_nonce('wgpp_delivery_progress'),'workspace'=>$c['id']];
+        $settings=['url'=>admin_url('admin-ajax.php'),'nonce'=>wp_create_nonce('wgpp_delivery_progress'),'workspace'=>$c['id'],'canDelete'=>$c['role']==='owner','formUrl'=>admin_url('admin-post.php'),'deleteNonce'=>wp_create_nonce('wgpp_report_delivery')];
         echo '<div data-delivery-live data-delivery-config="'.esc_attr(wp_json_encode($settings)).'" data-pending="'.($pending?'1':'0').'"><p class="wgpa-operation-status" data-tone="loading" data-delivery-progress role="status" aria-live="polite">'.($pending?'Your report is queued. This open page will check and advance preparation automatically.':'No pending deliveries.').'</p><button type="button" data-delivery-check>Check delivery now</button><div data-delivery-history>';
-        foreach(self::public_jobs($c['id']) as $j){echo '<details><summary>'.esc_html(ucfirst($j['status']).' · '.$j['created'].' · '.$j['type']).'</summary><p>'.esc_html($j['period']).'</p><p>'.esc_html($j['message']).'</p><p>Last activity: '.esc_html($j['updated']).' · Preparation attempts: '.(int)$j['attempts'].'</p>';foreach($j['recipients'] as $email=>$status){echo '<p>'.esc_html($email).' · '.esc_html($status).'</p>';}echo '</details>';}
+        foreach(self::public_jobs($c['id']) as $j){echo '<details><summary>'.esc_html(ucfirst($j['status']).' · '.$j['created'].' · '.$j['type']).'</summary><p>'.esc_html($j['period']).'</p><p>'.esc_html($j['message']).'</p><p>Last activity: '.esc_html($j['updated']).' · Preparation attempts: '.(int)$j['attempts'].'</p>';foreach($j['recipients'] as $email=>$status){echo '<p>'.esc_html($email).' · '.esc_html($status).'</p>';}if($c['role']==='owner'&&in_array($j['status'],['queued','processing'],true)){self::form($c['id'],'cancel');echo '<input type="hidden" name="job_id" value="'.esc_attr($j['id']).'"><button>Cancel delivery</button></form>';}if($c['role']==='owner'&&!in_array($j['status'],['queued','processing','sending'],true)){self::form($c['id'],'delete');echo '<input type="hidden" name="job_id" value="'.esc_attr($j['id']).'"><button>Delete record</button></form>';}echo '</details>';}
         if(!$s['jobs']){echo '<p>No report emails yet.</p>';}echo '</div></div>';
         return ob_get_clean();
     }

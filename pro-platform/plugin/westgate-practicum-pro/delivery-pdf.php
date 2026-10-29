@@ -2,6 +2,7 @@
 if (!defined('ABSPATH')) { exit; }
 
 require_once __DIR__.'/delivery-layout.php';
+require_once __DIR__.'/pdf-logo.php';
 
 /** Small native PDF renderer: selectable WinAnsi text, vector headings and pagination. */
 final class WGPP_Delivery_PDF {
@@ -10,14 +11,7 @@ final class WGPP_Delivery_PDF {
     private function __construct($company,$title){$this->company=$company;$this->title=$title;}
     private static function logo($company) {
         if(!$company || !function_exists('get_attached_file')){return null;}
-        try{$brand=WGPP_Company::brand($company);$path=get_attached_file((int)($brand['logo_id'] ?? 0));
-            if(!$path || !is_file($path) || filesize($path)>2097152){return null;}
-            $size=@getimagesize($path);if(!$size || $size[0]>5000 || $size[1]>5000 || !in_array($size[2],[IMAGETYPE_JPEG,IMAGETYPE_PNG],true)){return null;}
-            if($size[2]===IMAGETYPE_JPEG){return ['width'=>$size[0],'height'=>$size[1],'bytes'=>file_get_contents($path)];}
-            if(!function_exists('imagecreatefromstring')){return null;}
-            $source=@imagecreatefromstring(file_get_contents($path));if(!$source){return null;}
-            $w=min(240,$size[0]);$h=max(1,(int)round($w*$size[1]/$size[0]));$image=imagecreatetruecolor($w,$h);imagefill($image,0,0,imagecolorallocate($image,255,255,255));imagecopyresampled($image,$source,0,0,0,0,$w,$h,$size[0],$size[1]);ob_start();imagejpeg($image,null,85);$bytes=ob_get_clean();imagedestroy($source);imagedestroy($image);return ['width'=>$w,'height'=>$h,'bytes'=>$bytes];
-        }catch(Throwable $e){return null;}
+        try{$brand=WGPP_Company::brand($company);$path=get_attached_file((int)($brand['logo_id'] ?? 0));return WGPP_PDF_Logo::load($path);}catch(Throwable $e){return null;}
     }
     public static function plain($text) {
         $text=html_entity_decode(strip_tags((string)$text),ENT_QUOTES|ENT_HTML5,'UTF-8');
@@ -125,7 +119,10 @@ final class WGPP_Delivery_PDF {
         foreach($pdf->pages as $i=>$stream){$page=5+$i*2;$content=$page+1;$kids[]="$page 0 R";$pdf->stream='';$pdf->text('PRIVATE COMPANY REPORT | Page '.($i+1).' of '.count($pdf->pages),42,32,8,false,'0.35 0.43 0.48');$pdf->text(self::plain('Prepared: '.WGPP_Report_Delivery::stamp(strtotime($payload['created']))),285,32,7,false,'0.35 0.43 0.48');$pdf->text(self::plain('Data timezone: '.($s['current']['timezone'] ?? 'Unavailable')),285,21,7,false,'0.35 0.43 0.48');$stream.=$pdf->stream;
             $objects[$page]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> '.($pdf->logo?'/XObject << /Logo '.(5+count($pdf->pages)*2).' 0 R >> ':'').'>> /Contents '.$content.' 0 R >>';$objects[$content]='<< /Length '.strlen($stream).">>\nstream\n".$stream."endstream";
         }
-        $imageId=5+count($pdf->pages)*2;if($pdf->logo){$image=$pdf->logo;$objects[$imageId]='<< /Type /XObject /Subtype /Image /Width '.$image['width'].' /Height '.$image['height'].' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '.strlen($image['bytes']).">>\nstream\n".$image['bytes']."\nendstream";}
+        $imageId=5+count($pdf->pages)*2;if($pdf->logo){$image=$pdf->logo;$mask=$imageId+1;
+            $objects[$imageId]='<< /Type /XObject /Subtype /Image /Width '.$image['width'].' /Height '.$image['height'].' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /FlateDecode /SMask '.$mask.' 0 R /Length '.strlen($image['bytes']).">>\nstream\n".$image['bytes']."\nendstream";
+            $objects[$mask]='<< /Type /XObject /Subtype /Image /Width '.$image['width'].' /Height '.$image['height'].' /ColorSpace /DeviceGray /BitsPerComponent 8 /Filter /FlateDecode /Length '.strlen($image['alpha']).">>\nstream\n".$image['alpha']."\nendstream";
+        }
         foreach(self::fonts() as $key=>$font){
             $fileId=count($objects)+1;$raw=base64_decode($font['bytes'],true);$objects[$fileId]='<< /Length '.strlen($raw).' /Length1 '.strlen($raw).">>\nstream\n".$raw."\nendstream";
             $descriptor=$fileId+1;$objects[$descriptor]='<< /Type /FontDescriptor /FontName /'.$font['name'].' /Flags 32 /FontBBox [-1100 -500 2100 1400] /ItalicAngle 0 /Ascent 928 /Descent -236 /CapHeight 729 /StemV 80 /FontFile2 '.$fileId.' 0 R >>';
