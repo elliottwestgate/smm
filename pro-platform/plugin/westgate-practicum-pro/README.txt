@@ -1,3 +1,9 @@
+COMPANY LOGO IN BRAND HUB - 0.6.33-preview
+
+The emailed Analytics Report displays the company logo inside the Brand Axis
+hub when a supported logo is available. The existing Brand label remains the
+fallback. The header logo and all reporting data are unchanged.
+
 EMAIL REPORT REDESIGN - 0.6.32-preview
 
 Analytics Report attachments now use a four-page vector layout: Brand Axis and

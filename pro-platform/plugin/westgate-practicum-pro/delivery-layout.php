@@ -62,9 +62,13 @@ trait WGPP_Delivery_Layout {
         $this->stream.="0.74 0.81 0.85 RG 0.6 w 72 $cy m 368 $cy l S $cx ".($cy-63)." m $cx ".($cy+61)." l S\n";
         $this->stream.='0.06 0.47 0.66 RG 3 w 221 '.$cy.' m 170 '.($cy+71).' 89 '.($cy+65).' 89 '.$cy.' c 89 '.($cy-65).' 170 '.($cy-71).' 221 '.$cy.' c 272 '.($cy+71).' 353 '.($cy+65).' 353 '.$cy.' c 353 '.($cy-65).' 272 '.($cy-71).' 221 '.$cy." c S\n";
         $this->text('Acquisition',84,$cy-78,9,true);$this->text('Retention',293,$cy-78,9,true);
-        $this->box(194,$cy+12,54,25,'1 1 1');$this->text('Brand',206,$cy-4,11,true,'0.02 0.30 0.46');
         $dx=is_numeric($h)?tanh($h/100)*95:0;$dy=is_numeric($v)?tanh($v/100)*50:0;$mx=$cx+$dx;$my=$cy+$dy;
         if($h!==null && $v!==null){$this->stream.="0.93 0.46 0.12 RG 1.5 w $cx $cy m $mx $my l S\n";$this->box($mx-4,$my+4,8,8,'0.93 0.46 0.12');}
+        if($this->logo){
+            $scale=min(48/$this->logo['width'],38/$this->logo['height']);$w=$this->logo['width']*$scale;$height=$this->logo['height']*$scale;
+            $this->box($cx-$w/2-3,$cy+$height/2+3,$w+6,$height+6,'1 1 1');
+            $this->stream.=sprintf("q %.2f 0 0 %.2f %.2f %.2f cm /Logo Do Q\n",$w,$height,$cx-$w/2,$cy-$height/2);
+        }else{$this->box(194,$cy+12,54,25,'1 1 1');$this->text('Brand',206,$cy-4,11,true,'0.02 0.30 0.46');}
         $this->text('TRAFFIC MOVEMENT',389,$top-58,8,true);$this->text(is_numeric($v)?sprintf('%+.1f%%',$v):'No comparison',389,$top-84,19,true,'0.02 0.30 0.46');
         $this->text('RETURNING / NEW BALANCE',389,$top-113,7.5,true);$this->text(is_numeric($h)?sprintf('%+.1f%%',$h):'No comparison',389,$top-139,19,true,'0.02 0.30 0.46');
         $this->text('Directional signals',389,$top-165,8);$this->text('Schematic marker; not a score',389,$top-179,7.5);
