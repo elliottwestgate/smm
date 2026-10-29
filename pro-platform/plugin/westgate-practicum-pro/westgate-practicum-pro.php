@@ -2,7 +2,7 @@
 /**
  * Plugin Name: SMM Pro Analytics
  * Description: Company analytics dashboard and queued performance reviews within WordPress. Native Google Analytics, Constant Contact reporting and Facebook Page pilot.
- * Version: 0.6.29-preview
+ * Version: 0.6.30-preview
  * Author: Westgate Marketing
  * Requires PHP: 8.0
  * License: GPL-2.0-or-later

@@ -30,10 +30,10 @@ rejects(fn()=>WGPP_Account::confirm_email(10,1,str_repeat('a',64)),'Email verifi
 WGPP_Account::mail('member@example.com','Test only','Test only');
 check($GLOBALS['sent'][0]['from']==='Social Media Magnet Pro' && empty($GLOBALS['filters']),'Branded sender is scoped to product email only');
 WGPP_Account::mail('member@example.com','Test invitation','Test invitation',true);
-check($GLOBALS['sent'][1]['address']==='support@socialmediamagnet.net' && empty($GLOBALS['filters']),'Invitation uses the branded address without leaking sender filters to other mail');
-check(in_array('Reply-To: Social Media Magnet Pro <support@socialmediamagnet.net>',$GLOBALS['sent'][1]['headers'],true),'Invitation replies go to support at the requested .net domain');
+check($GLOBALS['sent'][1]['address']==='elliott@westgatemarketing.net' && empty($GLOBALS['filters']),'Invitation uses the branded address without leaking sender filters to other mail');
+check(in_array('Reply-To: Social Media Magnet Pro <elliott@westgatemarketing.net>',$GLOBALS['sent'][1]['headers'],true),'Invitation replies go to Elliott');
 WGPP_Account::mail('member@example.com','Other product mail','Other product mail');
-check($GLOBALS['sent'][2]['address']==='wordpress@example.com','Other email retains its existing sender configuration');
+check($GLOBALS['sent'][2]['address']==='elliott@westgatemarketing.net' && in_array('Reply-To: Social Media Magnet Pro <elliott@westgatemarketing.net>',$GLOBALS['sent'][2]['headers'],true),'Account verification and other product mail use Elliott as From and Reply-To');
 $GLOBALS['failMail']=true;rejects(fn()=>WGPP_Account::mail('member@example.com','Test failure','Test failure',true),'Mailer failure is returned to caller');unset($GLOBALS['failMail']);
 check(empty($GLOBALS['filters']),'Invitation sender filters are removed even if sending throws');
 $meta[10][WGPP_Team::INVITES]=['invite@example.com'=>['hash'=>hash('sha256',str_repeat('c',64)),'role'=>'viewer','expires'=>time()+100,'sent_at'=>time()-100,'message'=>'Please review our performance.']];

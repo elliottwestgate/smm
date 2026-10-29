@@ -1,3 +1,10 @@
+EMAIL SENDER UPDATE - 0.6.30-preview
+
+Pro Analytics invitations, account-verification messages and report emails use
+Social Media Magnet Pro <elliott@westgatemarketing.net> as From and Reply-To.
+Existing queued reports and schedules use this address when they send. Sender
+filters remain scoped to these product messages; unrelated WordPress mail is unchanged.
+
 EMAIL SENDER FIX - 0.6.29-preview
 
 Report emails and team invitations now use Social Media Magnet Pro
