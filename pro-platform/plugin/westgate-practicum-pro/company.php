@@ -91,7 +91,7 @@ final class WGPP_Company {
     }
     public static function asset_version($src,$handle){
         if(!str_starts_with($handle,'wgpp')){return $src;}
-        $version='0.6.30-preview';$path=parse_url($src,PHP_URL_PATH);
+        $version='0.6.31-preview';$path=parse_url($src,PHP_URL_PATH);
         if(is_string($path)&&preg_match('~/(assets/[a-zA-Z0-9._-]+\.(?:js|css)|portal\.css)$~D',$path,$match)){
             $file=__DIR__.'/'.$match[1];if(is_file($file)){$version=substr(hash_file('sha256',$file),0,16);}
         }

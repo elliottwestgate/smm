@@ -1,3 +1,11 @@
+REPORT PREPARATION FIX - 0.6.31-preview
+
+Completed website and social sections are encrypted and saved per delivery,
+preventing provider cache expiry from restarting earlier sections. Preparation
+steps retry after 15 seconds, show provider step counts where available and
+stop clearly after 30 minutes rather than remaining queued for hours.
+No incomplete timed-out report is emailed. The Elliott sender is retained.
+
 EMAIL SENDER UPDATE - 0.6.30-preview
 
 Pro Analytics invitations, account-verification messages and report emails use

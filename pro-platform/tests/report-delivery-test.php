@@ -23,9 +23,10 @@ class WGPP_Native_Reviews {const META='reviews';static function locked($c,$f){re
 class WGPP_GA4 {static function config($c){return null;}static function progress(...$v){}}
 class WGPP_Google {static function encrypt($a,$context){return json_encode([$context,$a]);}static function decrypt($a,$context){$v=json_decode($a,true);if($v[0]!==$context){throw new RuntimeException('Envelope scope');}return $v[1];}}
 class WGPP_Account {const INVITATION_FROM='elliott@westgatemarketing.net';}
-class WGPP_FB_Reports {static function request(...$a){return ['status'=>'not_connected'];}}
+class WGPP_FB_Reports {static function request(...$a){$key=static::class;$GLOBALS['provider_calls'][$key]=($GLOBALS['provider_calls'][$key]??0)+1;return isset($GLOBALS['provider_results'][$key])?array_shift($GLOBALS['provider_results'][$key]):['status'=>'not_connected'];}}
 class WGPP_IG_Reports extends WGPP_FB_Reports {}
-class WGPP_CC_Reports {static function progress($c){return ['status'=>'not_connected'];}}
+class WGPP_CC_Reports {static function progress($c){return array_shift($GLOBALS['email_results']) ?: ['status'=>'not_connected'];}}
+$GLOBALS['email_results']=[];
 class Mailer {public $attachment=false;function addStringAttachment($b,$n,...$rest){$this->attachment=str_starts_with($b,'%PDF-')&&str_ends_with($n,'.pdf');return $this->attachment;}function clearAttachments(){$GLOBALS['cleared']=true;}}
 function wp_mail($to,$subject,$body,$headers){apply_filters('pre_wp_mail',null);$m=new Mailer;foreach($GLOBALS['filters']['phpmailer_init']??[] as $f){$f($m);}$GLOBALS['mail'][]=[$to,$subject,$body,$m->attachment,apply_filters('wp_mail_from','wordpress@example.com'),$headers];return true;}
 require __DIR__.'/../plugin/westgate-practicum-pro/analytics.php';
@@ -101,6 +102,33 @@ $ranges=WGPP_Report_Delivery::period($s,$s['next']);$rows=[];foreach($ranges as 
 $meta[10][WGPP_Analytics::META]=WGPP_Analytics::validate(['schema'=>'wgpp-snapshots-v1','snapshots'=>$rows]);$meta[10][WGPP_Report_Delivery::META]=['schedules'=>['weekly'=>$s],'jobs'=>[]];
 WGPP_Report_Delivery::run(10);$state=WGPP_Report_Delivery::state(10);$sent=end($state['jobs']);check($sent['status']==='accepted'&&$sent['ranges']===$ranges,'Due production schedule builds and sends exact-range analytics');
 $n=count($mail);WGPP_Report_Delivery::run(10);check(count($mail)===$n&&$state['schedules']['weekly']['next']>time(),'Repeated cron pass cannot duplicate a scheduled period');
+// A later channel must not re-open completed provider sections after their cache expires.
+$_POST=['workspace'=>'10'];$_GET=[];
+$staged=$job;$staged['id']='staged';$staged['principal']=1;$staged['status']='queued';$staged['review']='';$staged['ranges']=$ranges;$staged['created']=$staged['updated']=time();$staged['recipients']=['staged@example.com'=>'queued'];
+$meta[10][WGPP_Report_Delivery::META]=['schedules'=>[],'jobs'=>['staged'=>$staged]];
+$GLOBALS['provider_calls']=[];$GLOBALS['provider_results']=[
+ 'WGPP_FB_Reports'=>[['status'=>'complete','errors'=>['followers'=>'unavailable']]],
+ 'WGPP_IG_Reports'=>[['status'=>'queued','step'=>1,'steps'=>6],['status'=>'complete','errors'=>['growth'=>'unavailable']]]
+];$GLOBALS['email_results']=[['status'=>'queued'],['status'=>'not_connected']];$n=count($mail);
+WGPP_Report_Delivery::run(10);$first=WGPP_Report_Delivery::state(10)['jobs']['staged'];
+check($first['status']==='queued'&&isset($first['preparation'])&&str_contains($first['message'],'Step 1 of 6'),'Partial preparation persists with provider step progress');
+check($first['retry_at']<=time()+16,'Preparation advances after fifteen seconds instead of one minute');
+rejects(fn()=>WGPP_Google::decrypt($first['preparation'],'delivery-preparation:20:staged'),'Preparation envelope is company and delivery scoped');
+// Remove website cache and leave no further Facebook results: both must already be frozen.
+$meta[10][WGPP_Analytics::META]=[];
+$meta[10][WGPP_Report_Delivery::META]['jobs']['staged']['retry_at']=0;
+WGPP_Report_Delivery::run(10);$second=WGPP_Report_Delivery::state(10)['jobs']['staged'];
+check($second['status']==='queued'&&str_contains($second['message'],'email campaign'),'Preparation reaches email without recollecting website or Facebook');
+$meta[10][WGPP_Report_Delivery::META]['jobs']['staged']['retry_at']=0;
+WGPP_Report_Delivery::run(10);$last=WGPP_Report_Delivery::state(10)['jobs']['staged'];
+check($last['status']==='accepted'&&count($mail)===$n+1&&$GLOBALS['provider_calls']===['WGPP_FB_Reports'=>1,'WGPP_IG_Reports'=>2],'Completed social sections survive later waits without restarting or duplicate mail');
+check(!isset($last['preparation'],$last['pdf']),'Terminal delivery removes encrypted preparation and PDF');
+$meta[10][WGPP_Analytics::META]=WGPP_Analytics::validate(['schema'=>'wgpp-snapshots-v1','snapshots'=>$rows]);
+$staged['id']='timeout';$staged['created']=time()-1801;$GLOBALS['provider_results']=['WGPP_FB_Reports'=>[['status'=>'queued']]];$n=count($mail);
+$meta[10][WGPP_Report_Delivery::META]=['schedules'=>[],'jobs'=>['timeout'=>$staged]];
+WGPP_Report_Delivery::run(10);$timeout=WGPP_Report_Delivery::state(10)['jobs']['timeout'];
+check($timeout['status']==='failed'&&!isset($timeout['preparation'])&&count($mail)===$n,'Preparation exceeding thirty minutes stops clearly without sending an incomplete report');
+unset($GLOBALS['provider_results']);$GLOBALS['email_results']=[];
 class DeliveryJSON extends Exception {public $data,$status;function __construct($d,$s){$this->data=$d;$this->status=$s;}}
 function check_ajax_referer($action,$field){if(empty($GLOBALS['nonceOK'])){throw new RuntimeException('nonce');}}
 function nocache_headers(){}function wp_send_json_success($d){throw new DeliveryJSON($d,200);}function wp_send_json_error($d,$s){throw new DeliveryJSON($d,$s);}
