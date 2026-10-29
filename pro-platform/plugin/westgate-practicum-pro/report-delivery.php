@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) { exit; }
 final class WGPP_Report_Delivery {
     const META = '_wgpp_report_delivery_v1';
     const HOOK = 'wgpp_report_delivery';
-    const VERSION = '0.6.28-preview';
+    const VERSION = '0.6.29-preview';
     private static $progressNote='Preparing reporting data. No email sent.';
     public static function boot() {
         add_action('admin_post_wgpp_report_delivery', [__CLASS__, 'handle']);
@@ -252,7 +252,7 @@ final class WGPP_Report_Delivery {
         // Refuse a preempting transport: it would bypass our in-memory attachment.
         $guard=static function($pre){if($pre!==null){throw new RuntimeException('Mail transport bypasses PDF attachments.');}return null;};
         add_filter('pre_wp_mail',$guard,PHP_INT_MAX);
-        try{$ok=wp_mail($email,$subject,$body,['Content-Type: text/plain; charset=UTF-8']);return $ok && $attached;}
+        try{$ok=wp_mail($email,$subject,$body,['Content-Type: text/plain; charset=UTF-8','Reply-To: Social Media Magnet Pro <'.WGPP_Account::INVITATION_FROM.'>']);return $ok && $attached;}
         finally{remove_action('phpmailer_init',$hook,PHP_INT_MAX);remove_filter('wp_mail_from_name',$sender,PHP_INT_MAX);remove_filter('wp_mail_from',$address,PHP_INT_MAX);remove_filter('pre_wp_mail',$guard,PHP_INT_MAX);if($mailer){$mailer->clearAttachments();}}
     }
     public static function collect($company,$job) {

@@ -1,3 +1,9 @@
+EMAIL SENDER FIX - 0.6.29-preview
+
+Report emails and team invitations now use Social Media Magnet Pro
+<support@socialmediamagnet.net> as From and Reply-To. Existing queues and schedules
+use this sender on their next send. The PDF layout revision remains pending.
+
 DELIVERY QUEUE PROGRESS FIX - 0.6.28-preview
 
 Adds authenticated dashboard queue advancement when WP-Cron is delayed, live delivery

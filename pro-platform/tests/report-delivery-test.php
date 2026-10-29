@@ -22,12 +22,12 @@ function sanitize_text_field($s){return strip_tags($s);}function sanitize_file_n
 class WGPP_Native_Reviews {const META='reviews';static function locked($c,$f){return $f();}}
 class WGPP_GA4 {static function config($c){return null;}static function progress(...$v){}}
 class WGPP_Google {static function encrypt($a,$context){return json_encode([$context,$a]);}static function decrypt($a,$context){$v=json_decode($a,true);if($v[0]!==$context){throw new RuntimeException('Envelope scope');}return $v[1];}}
-class WGPP_Account {const INVITATION_FROM='invitations@example.com';}
+class WGPP_Account {const INVITATION_FROM='support@socialmediamagnet.net';}
 class WGPP_FB_Reports {static function request(...$a){return ['status'=>'not_connected'];}}
 class WGPP_IG_Reports extends WGPP_FB_Reports {}
 class WGPP_CC_Reports {static function progress($c){return ['status'=>'not_connected'];}}
 class Mailer {public $attachment=false;function addStringAttachment($b,$n,...$rest){$this->attachment=str_starts_with($b,'%PDF-')&&str_ends_with($n,'.pdf');return $this->attachment;}function clearAttachments(){$GLOBALS['cleared']=true;}}
-function wp_mail($to,$subject,$body,$headers){apply_filters('pre_wp_mail',null);$m=new Mailer;foreach($GLOBALS['filters']['phpmailer_init']??[] as $f){$f($m);}$GLOBALS['mail'][]=[$to,$subject,$body,$m->attachment];return true;}
+function wp_mail($to,$subject,$body,$headers){apply_filters('pre_wp_mail',null);$m=new Mailer;foreach($GLOBALS['filters']['phpmailer_init']??[] as $f){$f($m);}$GLOBALS['mail'][]=[$to,$subject,$body,$m->attachment,apply_filters('wp_mail_from','wordpress@example.com'),$headers];return true;}
 require __DIR__.'/../plugin/westgate-practicum-pro/analytics.php';
 require __DIR__.'/../plugin/westgate-practicum-pro/company.php';
 require __DIR__.'/../plugin/westgate-practicum-pro/report-delivery.php';
@@ -53,7 +53,7 @@ $a=['from'=>'2026-10-01','to'=>'2026-10-28','timezone'=>'America/Chicago','prope
 $r=['current'=>['2026-10-01','2026-10-28'],'comparison'=>null];$payload=['snapshot'=>['current'=>$a,'comparison'=>null,'ranges'=>$r,'analysis'=>WGPP_Analytics::analyse($a,null)],'created'=>'2026-10-29T12:00:00Z'];
 $pdf=WGPP_Delivery_PDF::build('Example Brand',$payload);check(str_starts_with($pdf,'%PDF-1.4')&&str_contains($pdf,'Brand Axis')&&str_contains($pdf,'/Title (Example Brand'),'Native PDF has selectable evidence and document title');
 if(isset($argv[1])){file_put_contents($argv[1],$pdf);}
-check(WGPP_Report_Delivery::mail('a@example.com','Report','Body',$pdf,'report.pdf'),'Mailer sends in-memory PDF');check($mail[0][3]&&$GLOBALS['cleared']&&!count($filters['phpmailer_init']),'Attachment and mail hooks are cleaned after send');
+check(WGPP_Report_Delivery::mail('a@example.com','Report','Body',$pdf,'report.pdf'),'Mailer sends in-memory PDF');check($mail[0][4]==='support@socialmediamagnet.net'&&in_array('Reply-To: Social Media Magnet Pro <support@socialmediamagnet.net>',$mail[0][5],true),'Report From and Reply-To use the requested support mailbox');check($mail[0][3]&&$GLOBALS['cleared']&&!count($filters['phpmailer_init']),'Attachment and mail hooks are cleaned after send');
 add_filter('pre_wp_mail',fn()=>true);rejects(fn()=>WGPP_Report_Delivery::mail('a@example.com','Report','Body',$pdf,'report.pdf'),'Preempting transport cannot silently send without PDF');$filters['pre_wp_mail']=[];
 $meta[10]['reviews']=['review-one'=>['status'=>'completed','created_at'=>'2026-10-29T12:00:00Z','snapshot'=>$payload['snapshot'],'review'=>['summary'=>'Improve the Brand handoff.','actions'=>[],'findings'=>[]]]];
 rejects(fn()=>WGPP_Report_Delivery::saved_review(20,'review-one'),'Review IDs do not cross company boundary');

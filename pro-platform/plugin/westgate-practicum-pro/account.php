@@ -2,13 +2,14 @@
 if(!defined('ABSPATH')){exit;}
 final class WGPP_Account {
     const EMAIL='_wgpp_email_change_v1';
-    const INVITATION_FROM='invitations@socialmediamagnetpro.com';
+    const INVITATION_FROM='support@socialmediamagnet.net';
     public static function boot(){add_action('admin_post_wgpp_account',[__CLASS__,'handle']);}
     public static function assets(){wp_enqueue_script('wgpp-account',plugins_url('assets/account.js',__FILE__),[],'0.5.2-preview',true);wp_enqueue_style('wgpp-account',plugins_url('assets/analytics.css',__FILE__),[],'0.5.2-preview');}
     public static function mail($email,$subject,$body,$invitation=false){
         $sender=static function(){return 'Social Media Magnet Pro';};add_filter('wp_mail_from_name',$sender,PHP_INT_MAX);
         $address=static function(){return self::INVITATION_FROM;};if($invitation){add_filter('wp_mail_from',$address,PHP_INT_MAX);}
-        try{return wp_mail($email,$subject,$body,['Content-Type: text/plain; charset=UTF-8']);}finally{remove_filter('wp_mail_from_name',$sender,PHP_INT_MAX);if($invitation){remove_filter('wp_mail_from',$address,PHP_INT_MAX);}}
+        $headers=['Content-Type: text/plain; charset=UTF-8'];if($invitation){$headers[]='Reply-To: Social Media Magnet Pro <'.self::INVITATION_FROM.'>';}
+        try{return wp_mail($email,$subject,$body,$headers);}finally{remove_filter('wp_mail_from_name',$sender,PHP_INT_MAX);if($invitation){remove_filter('wp_mail_from',$address,PHP_INT_MAX);}}
     }
     public static function password($uid,$password){$u=get_userdata($uid);if(!$u || !is_string($password) || !wp_check_password(wp_unslash($password),$u->user_pass,$uid)){throw new RuntimeException('Your current password is incorrect.');}}
     public static function transfer($company,$actor,$target){
