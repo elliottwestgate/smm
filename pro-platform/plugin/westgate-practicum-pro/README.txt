@@ -1,3 +1,16 @@
+EMAIL REPORT REDESIGN - 0.6.32-preview
+
+Analytics Report attachments now use a four-page vector layout: Brand Axis and
+focus cards, website performance, compact social post rankings, returning
+audience/email response/profile. Embedded licensed fonts preserve typography.
+Charts and text remain native PDF elements, not screenshots. Social/email
+website sessions appear under Acquisition. Signed net-follower changes use
+absolute differences; email rate changes use percentage points.
+
+This changes new Analytics Report exports. Existing received attachments cannot
+change. Saved Review content and allowance are unchanged. The Elliott sender
+and preparation fixes remain included.
+
 REPORT PREPARATION FIX - 0.6.31-preview
 
 Completed website and social sections are encrypted and saved per delivery,

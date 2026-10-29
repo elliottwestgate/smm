@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) { exit; }
 final class WGPP_Report_Delivery {
     const META = '_wgpp_report_delivery_v1';
     const HOOK = 'wgpp_report_delivery';
-    const VERSION = '0.6.31-preview';
+    const VERSION = '0.6.32-preview';
     private static $progressNote='Preparing reporting data. No email sent.';
     public static function boot() {
         add_action('admin_post_wgpp_report_delivery', [__CLASS__, 'handle']);
