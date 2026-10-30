@@ -5,6 +5,7 @@ $uid=1;$company=10;$role='owner';$registered=[];$meta=[];$userMeta=[];
 class StopResponse extends Exception {public $data;public $status;public function __construct($data,$status){$this->data=$data;$this->status=$status;}}
 function add_action($name,$callback){global $registered;$registered[$name]=$callback;}
 function add_filter(...$args){}
+function register_activation_hook(...$args){}
 function add_shortcode($name,$callback){}
 function is_user_logged_in(){global $uid;return $uid>0;}
 function home_url($path=''){return 'https://example.com'.$path;}
@@ -16,6 +17,9 @@ function add_query_arg($key,$value,$url){return $url.(str_contains($url,'?')?'&'
 function get_option($key){global $optionValues;return $optionValues[$key]??false;}
 function absint($v){return abs((int)$v);}
 function is_admin(){return $GLOBALS['testAdminSurface'] ?? true;}
+function wp_get_environment_type(){return 'production';}
+function wp_generate_uuid4(){return '11111111-1111-4111-8111-111111111111';}
+function wp_next_scheduled(...$args){return false;}
 function get_transient($key){return false;}
 function delete_transient($key){}
 function get_userdata($id){return (object)['ID'=>$id,'display_name'=>'Example owner','user_email'=>'member'.$id.'@example.com','user_pass'=>'test-hash'];}

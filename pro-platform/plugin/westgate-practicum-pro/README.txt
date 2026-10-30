@@ -1,3 +1,70 @@
+TRANSPARENT LOGOS AND DELIVERY CONTROLS - 0.6.34-preview
+
+Company logos retain alpha transparency in the header and Brand Axis hub.
+Opaque edge-connected white backgrounds are removed during PDF rendering,
+without changing stored uploads. A directional arrow replaces the orange square.
+Delivery history retains five finished records plus all pending work. Owners
+can delete finished records, cancel pending deliveries and cancel recurring
+schedules (then create a new schedule to reschedule). Already sending/accepted
+emails cannot be recalled. Short-lived request hashes preserve duplicate and
+rate-limit protections after history is removed.
+
+COMPANY LOGO IN BRAND HUB - 0.6.33-preview
+
+The emailed Analytics Report displays the company logo inside the Brand Axis
+hub when a supported logo is available. The existing Brand label remains the
+fallback. The header logo and all reporting data are unchanged.
+
+EMAIL REPORT REDESIGN - 0.6.32-preview
+
+Analytics Report attachments now use a four-page vector layout: Brand Axis and
+focus cards, website performance, compact social post rankings, returning
+audience/email response/profile. Embedded licensed fonts preserve typography.
+Charts and text remain native PDF elements, not screenshots. Social/email
+website sessions appear under Acquisition. Signed net-follower changes use
+absolute differences; email rate changes use percentage points.
+
+This changes new Analytics Report exports. Existing received attachments cannot
+change. Saved Review content and allowance are unchanged. The Elliott sender
+and preparation fixes remain included.
+
+REPORT PREPARATION FIX - 0.6.31-preview
+
+Completed website and social sections are encrypted and saved per delivery,
+preventing provider cache expiry from restarting earlier sections. Preparation
+steps retry after 15 seconds, show provider step counts where available and
+stop clearly after 30 minutes rather than remaining queued for hours.
+No incomplete timed-out report is emailed. The Elliott sender is retained.
+
+EMAIL SENDER UPDATE - 0.6.30-preview
+
+Pro Analytics invitations, account-verification messages and report emails use
+Social Media Magnet Pro <elliott@westgatemarketing.net> as From and Reply-To.
+Existing queued reports and schedules use this address when they send. Sender
+filters remain scoped to these product messages; unrelated WordPress mail is unchanged.
+
+EMAIL SENDER FIX - 0.6.29-preview
+
+Report emails and team invitations now use Social Media Magnet Pro
+<support@socialmediamagnet.net> as From and Reply-To. Existing queues and schedules
+use this sender on their next send. The PDF layout revision remains pending.
+
+DELIVERY QUEUE PROGRESS FIX - 0.6.28-preview
+
+Adds authenticated dashboard queue advancement when WP-Cron is delayed, live delivery
+history, a Check delivery now button, preparation stage and last-activity feedback.
+Existing queued emails and saved schedules are retained. No need to resubmit a send.
+Unattended automatic schedules still require a functioning WordPress/host scheduler.
+
+REPORT DELIVERY - 0.6.27-preview
+
+Adds Account > Report Delivery; manual analytics PDF and saved Pro Analytics Review
+emailing, plus independent weekly, calendar-month and every-four-week analytics
+schedules. No public sharing URL or public PDF file is created. Existing provider
+connections, billing, team membership, reporting and saved Reviews are retained.
+
+Release/testing details: see pro-platform/docs/report-delivery-0.6.27.md in source.
+
 Westgate Practicum Pro 0.6.6-preview
 
 PRIVATE PILOT UPDATE

@@ -185,9 +185,9 @@ final class WGPP_Analytics {
         wp_enqueue_script('wgpp-export-name',plugins_url('assets/export-name.js',__FILE__),[],'0.6.6-preview.4',true);
         wp_enqueue_script('wgpp-analytics',plugins_url('assets/analytics.js',__FILE__),['wgpp-export-name'],'0.6.6-preview.4',true);
         wp_enqueue_script('wgpp-trends',plugins_url('assets/trends.js',__FILE__),['wgpp-analytics'],'0.6.6-preview.4',true);
-        wp_enqueue_script('wgpp-portal',plugins_url('assets/portal.js',__FILE__),['wgpp-analytics'],'0.6.6-preview.4',true);
+        wp_enqueue_script('wgpp-portal',plugins_url('assets/portal.js',__FILE__),['wgpp-analytics'],'0.6.27-preview',true);
         wp_enqueue_script('wgpp-facebook',plugins_url('assets/facebook.js',__FILE__),['wgpp-analytics'],'0.6.6-preview.4',true);
-        wp_enqueue_script('wgpp-reviews',plugins_url('assets/reviews.js',__FILE__),['wgpp-analytics'],'0.6.6-preview.4',true);
+        wp_enqueue_script('wgpp-reviews',plugins_url('assets/reviews.js',__FILE__),['wgpp-analytics'],'0.6.27-preview',true);
         wp_enqueue_script('wgpp-email',plugins_url('assets/email.js',__FILE__),['wgpp-analytics'],'0.6.6-preview.4',true);
         $saved=get_post_meta(WGPP_Company::context()['id'],self::META,true); $rows=$saved['snapshots'] ?? []; $latest=null;
         foreach($rows as $row) { if (!$latest || $row['to']>$latest['to'] || ($row['to']===$latest['to'] && $row['from']>$latest['from'])) { $latest=$row; } }

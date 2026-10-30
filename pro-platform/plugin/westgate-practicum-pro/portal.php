@@ -21,9 +21,10 @@ final class WGPP_Portal {
         <p><?php echo esc_html(ucfirst($c['role'])); ?> access · Company workspace</p>
         <p class="wgpa-small-note"><strong>Pro Analytics Guide:</strong> <a href="<?php echo esc_url(home_url('/pro-analytics-guide/')); ?>">Setup, reporting and Moves to Make</a> · <a href="<?php echo esc_url(home_url('/pro-analytics-guide/#smm-guide-foundation')); ?>">Brand Axis and Message Matrix explained</a>. Full Live Campaign lessons follow your existing curriculum access.</p>
         <div data-account-tabs class="wgpa-tablist" aria-label="Account sections">
-          <button type="button" data-account-tab="company">1. Company</button><button type="button" data-account-tab="connections">2. Connections</button><button type="button" data-account-tab="foundations">Brand foundations</button><button type="button" data-account-tab="profile">Your login</button><button type="button" data-account-tab="users">Users &amp; Invitations</button><button type="button" data-account-tab="billing">Billing</button>
+          <button type="button" data-account-tab="company">1. Company</button><button type="button" data-account-tab="connections">2. Connections</button><button type="button" data-account-tab="foundations">Brand foundations</button><button type="button" data-account-tab="profile">Your login</button><button type="button" data-account-tab="users">Users &amp; Invitations</button><button type="button" data-account-tab="delivery">Report Delivery</button><button type="button" data-account-tab="billing">Billing</button>
         </div>
         <section data-account-panel="foundations"><?php echo WGPP_Documents::render(); ?></section>
+        <section data-account-panel="delivery"><?php echo WGPP_Report_Delivery::render($c); ?></section>
         <section data-account-panel="profile"><?php echo WGPP_Account::profile($c); ?></section>
         <section data-account-panel="company"><h4>Company profile</h4>
           <?php if($owner){echo WGPP_Company::brand_render($c);}else{echo '<p>Company profile and service-area settings are managed by your owner.</p>';if(!empty($brand['website'])){echo '<p>Website: '.esc_html($brand['website']).'</p>';}} ?>
